@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:40:34 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/15 16:40:34 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/21 14:53:15 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,11 @@ void    perform_dda(t_game *game, t_ray *ray)
     if (ray->horiz_wall_hit.is_hit)
         horz_hit_distance = distance_from_origin(&game->player, ray->horiz_wall_hit.x, ray->horiz_wall_hit.y);
     else
-        horz_hit_distance = INT_MAX;
+        horz_hit_distance = (float)INT_MAX;
     if (ray->vert_wall_hit.is_hit)
         vert_hit_distance = distance_from_origin(&game->player, ray->vert_wall_hit.x, ray->vert_wall_hit.y);
     else
-        vert_hit_distance = INT_MAX;
+        vert_hit_distance = (float)INT_MAX;
     if (horz_hit_distance < vert_hit_distance)
     {
         ray->distance = horz_hit_distance;
@@ -115,18 +115,19 @@ void    perform_dda(t_game *game, t_ray *ray)
         ray->distance = vert_hit_distance;
         ray->wall_hit.x = ray->vert_wall_hit.x;
         ray->wall_hit.y = ray->vert_wall_hit.y;
+        ray->wall_hit_face = true;
     }
 }
 
 void    cast_ray(t_game *game, t_ray *ray, float ray_angle)
 {
     memset(ray, 0, sizeof(t_ray));
+
     ray_angle = normalize_angle(ray_angle);
     ray->tan_ray_angle = tanf(ray_angle);
     ray->facing_down = ray_angle > 0 && ray_angle < M_PI;
     ray->facing_left = ray_angle > M_PI_2 && ray_angle < 3 * M_PI_2;
 
-    // set_interecpt_values(game, ray, 0);
     ray->start = set_horiz_intercept(game, ray);
     ray->horiz_wall_hit = check_intersect(game, ray, 0);
 

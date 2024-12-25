@@ -1,20 +1,23 @@
 #include "../includes/cub3d.h"
 
-void    draw_square(t_game *game, int x, int y, int size, int color)
+void draw_square(t_game *game, int x, int y, int size, int color)
 {
     int i;
     int j;
 
     i = 0;
-    while (i < size)
+    while (i < size && y + i < game->win_height)
     {
         j = 0;
-        while (j < size)
+        while (j < size && x + j < game->win_width)
         {
-            if (i == 0 || j == 0)
-                ft_mlx_pixel_put(&game->render_buf, x + j, y + i, 0x000000);
-            else
-                ft_mlx_pixel_put(&game->render_buf, x + j, y + i, color);
+            if (x + j >= 0 && y + i >= 0) // Ensure the pixel is within the window boundaries
+            {
+                if (i == 0 || j == 0)
+                    ft_mlx_pixel_put(&game->render_buf, x + j, y + i, 0x000000);
+                else
+                    ft_mlx_pixel_put(&game->render_buf, x + j, y + i, color);
+            }
             j++;
         }
         i++;
@@ -40,57 +43,29 @@ void    draw_circle(t_game *game, int x, int y, int radius, int color)
     }
 }
 
-void draw_line(t_game *game, int x, int y, int color)
+void draw_line(t_game *game, int x0, int y0, int x1, int y1, int color)
 {
-    int dx, dy, p, x0, y0, x1, y1, x_inc, y_inc;
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int sx = (x0 < x1) ? 1 : -1;
+    int sy = (y0 < y1) ? 1 : -1;
+    int err = dx - dy;
 
-    x0 = game->player.x;
-    y0 = game->player.y;
-    x1 = x;
-    y1 = y;
-
-    if (x < 0)
-        x1 = 0;
-    else if (x >= game->win_width)
-        x1 = game->win_width - 1;
-    if (y < 0)
-        y1 = 0;
-    else if (y >= game->win_height)
-        y1 = game->win_height - 1;
-    dx = abs(x1 - x0);
-    dy = abs(y1 - y0);
-    x_inc = (x0 < x1) ? 1 : -1;
-    y_inc = (y0 < y1) ? 1 : -1;
-
-    if (dx > dy)
+    while (1)
     {
-        p = 2 * dy - dx;
-        while (x0 != x1)
+        ft_mlx_pixel_put(&game->render_buf, x0, y0, color);
+        if (x0 == x1 && y0 == y1)
+            break;
+        int e2 = err * 2;
+        if (e2 > -dy)
         {
-            ft_mlx_pixel_put(&game->render_buf, x0, y0, color);
-            x0 += x_inc;
-            if (p >= 0)
-            {
-                y0 += y_inc;
-                p -= 2 * dx;
-            }
-            p += 2 * dy;
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dx)
+        {
+            err += dx;
+            y0 += sy;
         }
     }
-    else
-    {
-        p = 2 * dx - dy;
-        while (y0 != y1)
-        {
-            ft_mlx_pixel_put(&game->render_buf, x0, y0, color);
-            y0 += y_inc;
-            if (p >= 0)
-            {
-                x0 += x_inc;
-                p -= 2 * dy;
-            }
-            p += 2 * dx;
-        }
-    }
-    ft_mlx_pixel_put(&game->render_buf, x0, y0, color);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:39:41 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/15 16:39:41 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/21 10:24:45 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,23 @@ int exit_routine(t_game *game)
     int i;
 
     i = 0;
-    while (game->map[i])
+    while (game->map && game->map[i])
     {
         free(game->map[i]);
         i++;
     }
     free(game->map);
-    mlx_destroy_image(game->mlx, game->render_buf.img);
-    mlx_destroy_window(game->mlx, game->win);
+    if (game->mlx)
+    {
+        if (game->render_buf.img)
+            mlx_destroy_image(game->mlx, game->render_buf.img);
+        if (game->win)
+            mlx_destroy_window(game->mlx, game->win);
+        mlx_destroy_display(game->mlx);
+    }
     exit(0);
 }
+
 int key_press(int key, t_game *game)
 {
     if (key == ESC)

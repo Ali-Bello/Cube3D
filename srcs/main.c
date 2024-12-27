@@ -46,7 +46,7 @@ int update(t_game *data)
 
     mlx_clear_window(data->mlx, data->win);
     clear_buf_img(data);
-    draw_map(data);
+    // draw_map(data);
     move_step = data->player.walk_dir * data->player.mov_speed;
     data->player.rot_angle += (data->player.turn_dir * data->player.rot_speed);
     next_map_player_x = data->player.x + cosf(data->player.rot_angle) * move_step;

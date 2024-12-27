@@ -12,15 +12,18 @@
 
 #include "../includes/cub3d.h"
 
-void	ft_cpy_pixel(t_img *src, t_img *dst, int x, int y)
+void	ft_cpy_wall_px(t_img *src, t_img *dst, t_point *src_pos, t_point *dst_pos)
 {
     char    *dst_px;
     char    *src_px;
 
-    // printf("y = [%d], x = [%d]\n", y * src->line_len % TILE_SIZE, 9);
-    dst_px = dst->addr + ((y * dst->line_len) + (x * (dst->bpp / 8)));
-    src_px = src->addr + ((y * src->line_len % TILE_SIZE) + (x % TILE_SIZE * src->bpp / 8));
-    *(unsigned int *)dst_px = *(unsigned int *)src_px;
+    if (src_pos->x < 0 || src_pos->x >= src->width || src_pos->y < 0 || src_pos->y >= src->height)
+        return;
+    if (dst_pos->x < 0 || dst_pos->x >= dst->width || dst_pos->y < 0 || dst_pos->y >= dst->height)
+        return;
+    dst_px = dst->addr + ((int)dst_pos->y * dst->line_len + (int)(dst_pos->x * (dst->bpp / 8)));
+    src_px = &src->addr[(int)src_pos->y * src->line_len + (int)(src_pos->x * (src->bpp / 8))];
+        memcpy(dst_px, src_px, src->bpp / 8);
 }
 
 void    ft_mlx_pixel_put(t_img *data, int x, int y, int color)
@@ -62,9 +65,16 @@ void    draw_player(t_game *game)
 
 void    draw_ray(t_game *game, t_ray *ray, int w_idx)
 {
-    int i;
+    t_point render_cord;
+    t_point wall_cord;
+    int     i;
 
     i = 0;
+    render_cord.x = w_idx;
+    if (ray->vert_wall_hit.is_hit)
+        wall_cord.x = (int)ray->wall_hit.y % TILE_SIZE;
+    else
+        wall_cord.x = (int)ray->wall_hit.x % TILE_SIZE;
     while (i < ray->top_px)
     {
         // ft_cpy_pixel(&game->textures, &game->render_buf, w_idx, i);
@@ -74,14 +84,16 @@ void    draw_ray(t_game *game, t_ray *ray, int w_idx)
     i = ray->top_px;
     while (i < ray->botm_px)
     {
-        ft_cpy_pixel(&game->textures, &game->render_buf, w_idx, i);
+        render_cord.y = i;
+        wall_cord.y = (i - ray->top_px) * game->textures.height / ray->wall_height;
+        ft_cpy_wall_px(&game->textures, &game->render_buf, &wall_cord, &render_cord);
         // ft_mlx_pixel_put(&game->render_buf, w_idx, i, 0xAAAAAAA);
         i++;
     }
     i = ray->botm_px;
     while (i < game->win_height)
     {
-        // ft_mlx_pixel_put(&game->render_buf, w_idx, i, 0x000000);
+        ft_mlx_pixel_put(&game->render_buf, w_idx, i, 0x424242);
         i++;
     }
 }

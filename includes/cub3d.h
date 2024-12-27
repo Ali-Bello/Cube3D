@@ -33,6 +33,18 @@
 #define FOV 60 * (M_PI / 180)
 #define SCALE_FACTOR 0.25
 
+# define EXIT_STATUS 0
+# define RED "\x1b[31m"
+# define GREEN "\x1b[32m"
+# define BLUE "\x1b[34m"
+# define YELLOW "\x1b[33m"
+# define MAGENTA "\x1b[35m"
+# define CYAN "\x1b[36m"
+# define RESET "\x1b[0m"
+# define BOLD "\x1b[1m"
+# define ITALIC "\x1b[3m"
+# define UNDERLINE "\x1b[4m"
+
 typedef struct s_img
 {
     void    *img;
@@ -129,7 +141,7 @@ int key_release(int key, t_game *game);
     ////////////  RENDER  /////////////////
 
 void    ft_mlx_pixel_put(t_img *data, int x, int y, int color);
-void	ft_cpy_pixel(t_img *src, t_img *dst, int x, int y);
+void	ft_cpy_wall_px(t_img *src, t_img *dst, t_point *src_pos, t_point *dst_pos);
 void    draw_map(t_game *game);
 void    draw_player(t_game *game);
 void    draw_ray(t_game *game, t_ray *ray, int w_idx);

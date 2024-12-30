@@ -64,12 +64,12 @@ void    init_game(t_game *data)
     data->player.y = TILE_SIZE + 32;
     data->player.radius = 8;
     data->player.rot_angle = M_PI / 2;
-    data->player.mov_speed = 2;
-    data->player.rot_speed = 2 *(M_PI / 180);
+    data->player.mov_speed = 1;
+    data->player.rot_speed = 1 * (M_PI / 180);
     data->rays = calloc(data->win_width, sizeof(t_ray));
     data->textures.img = mlx_xpm_file_to_image(data->mlx, "wall.xpm",\
                         &data->textures.width, &data->textures.height);
-    data->textures.addr = mlx_get_data_addr(data->mlx, &data->textures.bpp,\
+    data->textures.addr = mlx_get_data_addr(data->textures.img, &data->textures.bpp,\
                         &data->textures.line_len, &data->textures.endian);
 }
 

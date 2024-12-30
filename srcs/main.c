@@ -45,7 +45,6 @@ int update(t_game *data)
     float   next_map_player_y;
 
     mlx_clear_window(data->mlx, data->win);
-    clear_buf_img(data);
     // draw_map(data);
     move_step = data->player.walk_dir * data->player.mov_speed;
     data->player.rot_angle += (data->player.turn_dir * data->player.rot_speed);
@@ -59,7 +58,6 @@ int update(t_game *data)
     draw_player(data);
     rays_cast(data);
     mlx_put_image_to_window(data->mlx, data->win, data->render_buf.img, 0, 0);
-    // mlx_put_image_to_window(data->mlx, data->win, data->textures.img, 120, 120);
     return (0);
 }
 

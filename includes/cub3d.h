@@ -29,11 +29,14 @@
 #define LEFT 65361
 #define RIGHT 65363
 #define ESC 65307
-#define TILE_SIZE 64
+#define TILE_SIZE 32
 #define FOV 60 * (M_PI / 180)
-#define SCALE_FACTOR 0.25
+#define WIN_WIDTH  1280
+#define WIN_HEIGHT 720
+#define WALK_SPEED 1
+#define ROT_SPEED 1 * (M_PI / 180)
+#define MINI_MAP_SIZE 150
 
-# define EXIT_STATUS 0
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
 # define BLUE "\x1b[34m"
@@ -61,8 +64,6 @@ typedef struct s_player
     float   x;
     float   y;
     float   radius;
-    float   mov_speed;
-    float   rot_speed;
     float   rot_angle;
     char    walk_dir; // 1 walk forward, -1 walk backward 
     char    turn_dir; // 1 turn right, -1 turn left

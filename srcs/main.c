@@ -1,5 +1,19 @@
 #include "../includes/cub3d.h"
 
+void draw_mini_ray(t_game *game, t_ray *ray)
+{
+    float   scale_factor;
+    int     px;
+    int     py;
+
+    scale_factor = fminf((float)MINI_MAP_SIZE / (game->win_width * TILE_SIZE),\
+                    (float)MINI_MAP_SIZE / (game->win_height * TILE_SIZE));
+    px = (game->player.x / TILE_SIZE) * scale_factor;
+    py = (game->player.y / TILE_SIZE) * scale_factor;
+    (void)ray;
+    printf("px = [%d], py = [%d]\n", px, py);
+}
+
 void    rays_cast(t_game *data)
 {
     int     i;
@@ -8,25 +22,20 @@ void    rays_cast(t_game *data)
 
     i = 0;
     angle = data->player.rot_angle - (FOV / 2);
-    while (i < data->win_width)
+    while (i < WIN_WIDTH)
     {
         cast_ray(data, &ray, angle);
-        ray.plane_distance = (data->win_width / 2) / tanf(FOV / 2);
+        ray.plane_distance = (WIN_WIDTH / 2) / tanf(FOV / 2);
         ray.wall_height = (TILE_SIZE / (ray.distance * cosf(angle - data->player.rot_angle))) * ray.plane_distance;
-        ray.top_px = (data->win_height / 2) - (ray.wall_height / 2);
+        ray.top_px = (WIN_HEIGHT / 2) - (ray.wall_height / 2);
         if (ray.top_px < 0)
             ray.top_px = 0;
-        ray.botm_px = (data->win_height / 2) + (ray.wall_height / 2);
-        if (ray.botm_px > data->win_height)
-            ray.botm_px = data->win_height;
+        ray.botm_px = (WIN_HEIGHT / 2) + (ray.wall_height / 2);
+        if (ray.botm_px > WIN_HEIGHT)
+            ray.botm_px = WIN_HEIGHT;
         draw_ray(data, &ray, i);
-        // draw_line(data,
-        //     data->player.x * SCALE_FACTOR,
-        //     data->player.y * SCALE_FACTOR,
-        //     ray.wall_hit.x * SCALE_FACTOR,
-        //     ray.wall_hit.y * SCALE_FACTOR,
-        //     0x003115);
-        angle += FOV / data->win_width;
+        // draw_mini_ray(data, &ray);
+        angle += FOV / WIN_WIDTH;
         i++;
     }
 }
@@ -46,8 +55,8 @@ int update(t_game *data)
 
     mlx_clear_window(data->mlx, data->win);
     // draw_map(data);
-    move_step = data->player.walk_dir * data->player.mov_speed;
-    data->player.rot_angle += (data->player.turn_dir * data->player.rot_speed);
+    move_step = data->player.walk_dir * WALK_SPEED;
+    data->player.rot_angle += (data->player.turn_dir * ROT_SPEED);
     next_map_player_x = data->player.x + cosf(data->player.rot_angle) * move_step;
     next_map_player_y = data->player.y + sinf(data->player.rot_angle) * move_step;
     if (!wall_collision_check(data->map, next_map_player_x, next_map_player_y))
@@ -55,11 +64,11 @@ int update(t_game *data)
         data->player.x = next_map_player_x;
         data->player.y = next_map_player_y;
     }
-    draw_player(data);
     rays_cast(data);
     mlx_put_image_to_window(data->mlx, data->win, data->render_buf.img, 0, 0);
     return (0);
 }
+
 
 int main()
 {

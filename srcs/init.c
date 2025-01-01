@@ -55,8 +55,8 @@ void    init_game(t_game *data)
     data->mlx = mlx_init();
     if (!data->mlx)
         return ;
-    data->win = mlx_new_window(data->mlx, data->win_width, data->win_height, "Cube3D");
-    data->render_buf.img = mlx_new_image(data->mlx, data->win_width, data->win_height);
+    data->win = mlx_new_window(data->mlx, WIN_WIDTH, WIN_HEIGHT, "Cube3D");
+    data->render_buf.img = mlx_new_image(data->mlx, WIN_WIDTH, WIN_HEIGHT);
     if (data->render_buf.img)
         data->render_buf.addr = mlx_get_data_addr(data->render_buf.img, &data->render_buf.bpp,
                         &data->render_buf.line_len, &data->render_buf.endian);
@@ -64,9 +64,7 @@ void    init_game(t_game *data)
     data->player.y = TILE_SIZE + 32;
     data->player.radius = 8;
     data->player.rot_angle = M_PI / 2;
-    data->player.mov_speed = 1;
-    data->player.rot_speed = 1 * (M_PI / 180);
-    data->rays = calloc(data->win_width, sizeof(t_ray));
+    data->rays = calloc(WIN_WIDTH, sizeof(t_ray));
     data->textures.img = mlx_xpm_file_to_image(data->mlx, "wall.xpm",\
                         &data->textures.width, &data->textures.height);
     data->textures.addr = mlx_get_data_addr(data->textures.img, &data->textures.bpp,\

@@ -2,25 +2,17 @@
 
 void draw_square(t_game *game, int x, int y, int size, int color)
 {
-    int i;
-    int j;
+    int i, j;
 
-    i = 0;
-    while (i < size && y + i < game->win_height)
+    for (i = 0; i < size; i++)
     {
-        j = 0;
-        while (j < size && x + j < game->win_width)
+        for (j = 0; j < size; j++)
         {
-            if (x + j >= 0 && y + i >= 0) // Ensure the pixel is within the window boundaries
+            if (x + i >= 0 && x + i < MINI_MAP_SIZE && y + j >= 0 && y + j < MINI_MAP_SIZE)
             {
-                if (i == 0 || j == 0)
-                    ft_mlx_pixel_put(&game->render_buf, x + j, y + i, 0x000000);
-                else
-                    ft_mlx_pixel_put(&game->render_buf, x + j, y + i, color);
+                ft_mlx_pixel_put(&game->render_buf, x + i, y + j, color);
             }
-            j++;
         }
-        i++;
     }
 }
 

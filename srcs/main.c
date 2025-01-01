@@ -2,16 +2,26 @@
 
 void draw_mini_ray(t_game *game, t_ray *ray)
 {
-    float   scale_factor;
-    int     px;
-    int     py;
+    int px, py;
+    int rx, ry;
 
-    scale_factor = fminf((float)MINI_MAP_SIZE / (game->win_width * TILE_SIZE),\
-                    (float)MINI_MAP_SIZE / (game->win_height * TILE_SIZE));
-    px = (game->player.x / TILE_SIZE) * scale_factor;
-    py = (game->player.y / TILE_SIZE) * scale_factor;
-    (void)ray;
-    printf("px = [%d], py = [%d]\n", px, py);
+    int offset_x = MINI_MAP_SIZE / 2 - (game->player.x * MINI_MAP_SCALE_FACTOR);
+    int offset_y = MINI_MAP_SIZE / 2 - (game->player.y * MINI_MAP_SCALE_FACTOR);
+    px = game->player.x * MINI_MAP_SCALE_FACTOR + offset_x;
+    py = game->player.y * MINI_MAP_SCALE_FACTOR + offset_y;
+
+    rx = ray->wall_hit.x * MINI_MAP_SCALE_FACTOR + offset_x;
+    ry = ray->wall_hit.y * MINI_MAP_SCALE_FACTOR + offset_y;
+    if (ry < 0)
+        ry = 0;
+    if (rx < 0)
+        rx = 0;
+    if (ry > 150)
+        ry = 150;
+    if (rx > 150)
+        rx = 150;
+    draw_line(game, px, py, rx, ry, 0xFF0000);
+    draw_square(game, game->player.x * MINI_MAP_SCALE_FACTOR + offset_x, game->player.y * MINI_MAP_SCALE_FACTOR + offset_y, 5, 0x00FF00);
 }
 
 void    rays_cast(t_game *data)
@@ -34,7 +44,7 @@ void    rays_cast(t_game *data)
         if (ray.botm_px > WIN_HEIGHT)
             ray.botm_px = WIN_HEIGHT;
         draw_ray(data, &ray, i);
-        // draw_mini_ray(data, &ray);
+        draw_mini_ray(data, &ray);
         angle += FOV / WIN_WIDTH;
         i++;
     }
@@ -54,7 +64,7 @@ int update(t_game *data)
     float   next_map_player_y;
 
     mlx_clear_window(data->mlx, data->win);
-    // draw_map(data);
+    draw_map(data);
     move_step = data->player.walk_dir * WALK_SPEED;
     data->player.rot_angle += (data->player.turn_dir * ROT_SPEED);
     next_map_player_x = data->player.x + cosf(data->player.rot_angle) * move_step;

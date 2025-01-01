@@ -34,7 +34,7 @@ t_point check_intersect(t_game *game, t_ray *ray, bool flag)
         && ray->start.y >= 0 && ray->start.y < game->win_height)
     {
         next_touch.x = ray->start.x;
-        if (flag && ray->facing_left)
+        if (flag && ray->facing_left && next_touch.x > 0)
             next_touch.x--;
         next_touch.y = ray->start.y;
         if (!flag && !ray->facing_down)

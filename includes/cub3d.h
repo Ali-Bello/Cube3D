@@ -31,11 +31,12 @@
 #define ESC 65307
 #define TILE_SIZE 32
 #define FOV 60 * (M_PI / 180)
-#define WIN_WIDTH  1280
-#define WIN_HEIGHT 720
-#define WALK_SPEED 1
-#define ROT_SPEED 1 * (M_PI / 180)
+#define WIN_WIDTH  1920
+#define WIN_HEIGHT 1080
+#define WALK_SPEED 7
+#define ROT_SPEED 7 * (M_PI / 180)
 #define MINI_MAP_SIZE 150
+#define MINI_MAP_SCALE_FACTOR 1
 
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"

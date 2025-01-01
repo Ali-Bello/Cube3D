@@ -33,20 +33,16 @@ void draw_map(t_game *game)
 {
     int x, y;
 
-    // Calculate scale factor to fit the map within 150x150 square
-    float scale_factor = fminf((float)MINI_MAP_SIZE / (game->win_width * TILE_SIZE), (float)MINI_MAP_SIZE / (game->win_height * TILE_SIZE));
-    printf("Scale factor = [%f]\n", scale_factor);
-    // Calculate the offset to center the player's position
-    int offset_x = MINI_MAP_SIZE / 2 - (game->player.x * scale_factor);
-    int offset_y = MINI_MAP_SIZE / 2 - (game->player.y * scale_factor);
+    int offset_x = MINI_MAP_SIZE / 2 - (game->player.x * MINI_MAP_SCALE_FACTOR);
+    int offset_y = MINI_MAP_SIZE / 2 - (game->player.y * MINI_MAP_SCALE_FACTOR);
 
     for (y = 0; game->map[y]; y++)
     {
         for (x = 0; x < game->map[y][x] ; x++)
         {
-            int scaled_x = x * TILE_SIZE * scale_factor + offset_x;
-            int scaled_y = y * TILE_SIZE * scale_factor + offset_y;
-            int scaled_tile_size = TILE_SIZE * scale_factor;
+            int scaled_x = x * TILE_SIZE * MINI_MAP_SCALE_FACTOR + offset_x;
+            int scaled_y = y * TILE_SIZE * MINI_MAP_SCALE_FACTOR + offset_y;
+            int scaled_tile_size = TILE_SIZE * MINI_MAP_SCALE_FACTOR;
 
             if (game->map[y][x] == '1')
             {
@@ -56,7 +52,7 @@ void draw_map(t_game *game)
             else
             {
                 // Draw empty tile
-                draw_square(game, scaled_x, scaled_y, scaled_tile_size, 0x0CC000);
+                draw_square(game, scaled_x, scaled_y, scaled_tile_size, 0x000000);
             }
         }
     }

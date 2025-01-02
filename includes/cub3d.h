@@ -29,14 +29,14 @@
 #define LEFT 65361
 #define RIGHT 65363
 #define ESC 65307
-#define TILE_SIZE 32
+#define CUB_SIZE 64
 #define FOV 60 * (M_PI / 180)
 #define WIN_WIDTH  1920
 #define WIN_HEIGHT 1080
-#define WALK_SPEED 7
-#define ROT_SPEED 7 * (M_PI / 180)
+#define WALK_SPEED 2.0
+#define ROT_SPEED 1.0 * (M_PI / 180)
 #define MINI_MAP_SIZE 150
-#define MINI_MAP_SCALE_FACTOR 1
+#define MINI_MAP_SCALE_FACTOR 0.5
 
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
@@ -64,7 +64,6 @@ typedef struct s_player
 {
     float   x;
     float   y;
-    float   radius;
     float   rot_angle;
     char    walk_dir; // 1 walk forward, -1 walk backward 
     char    turn_dir; // 1 turn right, -1 turn left
@@ -98,15 +97,14 @@ typedef struct s_ray
 
 typedef struct s_game
 {
-    void    *mlx;
-    void    *win;
-    int     win_width;
-    int     win_height;
-    char    **map;
-    t_player player;
-    t_img   render_buf;
-    t_img   textures;
-    t_ray   *rays;
+    void        *mlx;
+    void        *win;
+    int         map_width;
+    int         map_height;
+    char        **map;
+    t_player    player;
+    t_img       render_buf;
+    t_img       textures;
 } t_game;
 
     //////////// INITIALIZING /////////////

@@ -8,7 +8,7 @@ void draw_square(t_game *game, int x, int y, int size, int color)
     {
         for (j = 0; j < size; j++)
         {
-            if (x + i >= 0 && x + i < MINI_MAP_SIZE && y + j >= 0 && y + j < MINI_MAP_SIZE)
+            if (x + i >= 0 && x + i <= MINI_MAP_SIZE && y + j >= 0 && y + j <= MINI_MAP_SIZE)
             {
                 ft_mlx_pixel_put(&game->render_buf, x + i, y + j, color);
             }

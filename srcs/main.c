@@ -1,27 +1,31 @@
 #include "../includes/cub3d.h"
 
-void draw_mini_ray(t_game *game, t_ray *ray)
+void draw_player(t_game *game)
 {
-    int px, py;
-    int rx, ry;
+    int x;
+    int y;
+    int offset;
+    float perpendicular_angle;
 
-    int offset_x = MINI_MAP_SIZE / 2 - (game->player.x * MINI_MAP_SCALE_FACTOR);
-    int offset_y = MINI_MAP_SIZE / 2 - (game->player.y * MINI_MAP_SCALE_FACTOR);
-    px = game->player.x * MINI_MAP_SCALE_FACTOR + offset_x;
-    py = game->player.y * MINI_MAP_SCALE_FACTOR + offset_y;
-
-    rx = ray->wall_hit.x * MINI_MAP_SCALE_FACTOR + offset_x;
-    ry = ray->wall_hit.y * MINI_MAP_SCALE_FACTOR + offset_y;
-    if (ry < 0)
-        ry = 0;
-    if (rx < 0)
-        rx = 0;
-    if (ry > 150)
-        ry = 150;
-    if (rx > 150)
-        rx = 150;
-    draw_line(game, px, py, rx, ry, 0xFF0000);
-    draw_square(game, game->player.x * MINI_MAP_SCALE_FACTOR + offset_x, game->player.y * MINI_MAP_SCALE_FACTOR + offset_y, 5, 0x00FF00);
+    x = MINI_MAP_SIZE / 2;
+    y = x;
+    draw_circle(game, x, y, 10 * MINI_MAP_SCALE_FACTOR, 0xFF0000);
+    int dir_x;
+    int dir_y;
+    dir_x = x + cosf(game->player.rot_angle) * 25 * MINI_MAP_SCALE_FACTOR;
+    dir_y = y + sinf(game->player.rot_angle) * 25 * MINI_MAP_SCALE_FACTOR;
+    
+    // Calculate perpendicular angle
+    perpendicular_angle = game->player.rot_angle + (M_PI / 2);
+    
+    // Draw player's direction lines
+    for (int i = -7; i < 10; i++)
+    {
+        offset = i * MINI_MAP_SCALE_FACTOR;
+        int start_x = x + cosf(perpendicular_angle) * offset;
+        int start_y = y + sinf(perpendicular_angle) * offset;
+        draw_line(game, start_x, start_y, dir_x, dir_y, 0xFF0000);
+    }
 }
 
 void    rays_cast(t_game *data)
@@ -36,15 +40,14 @@ void    rays_cast(t_game *data)
     {
         cast_ray(data, &ray, angle);
         ray.plane_distance = (WIN_WIDTH / 2) / tanf(FOV / 2);
-        ray.wall_height = (TILE_SIZE / (ray.distance * cosf(angle - data->player.rot_angle))) * ray.plane_distance;
+        ray.wall_height = (CUB_SIZE / (ray.distance * cosf(angle - data->player.rot_angle))) * ray.plane_distance;
         ray.top_px = (WIN_HEIGHT / 2) - (ray.wall_height / 2);
         if (ray.top_px < 0)
             ray.top_px = 0;
-        ray.botm_px = (WIN_HEIGHT / 2) + (ray.wall_height / 2);
+        ray.botm_px = ray.top_px + ray.wall_height;
         if (ray.botm_px > WIN_HEIGHT)
             ray.botm_px = WIN_HEIGHT;
         draw_ray(data, &ray, i);
-        draw_mini_ray(data, &ray);
         angle += FOV / WIN_WIDTH;
         i++;
     }
@@ -52,7 +55,7 @@ void    rays_cast(t_game *data)
 
 bool    wall_collision_check(char **map, float x, float y)
 {
-    if (map[(int)(floorf(y) / TILE_SIZE)][(int)(floorf(x) / TILE_SIZE)] == '1')
+    if (map[(int)(floorf(y) / CUB_SIZE)][(int)(floorf(x) / CUB_SIZE)] == '1')
         return (true);
     return (false);
 }
@@ -75,6 +78,7 @@ int update(t_game *data)
         data->player.y = next_map_player_y;
     }
     rays_cast(data);
+    draw_player(data);
     mlx_put_image_to_window(data->mlx, data->win, data->render_buf.img, 0, 0);
     return (0);
 }

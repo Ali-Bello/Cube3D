@@ -40,9 +40,9 @@ void draw_map(t_game *game)
     {
         for (x = 0; x < game->map[y][x] ; x++)
         {
-            int scaled_x = x * TILE_SIZE * MINI_MAP_SCALE_FACTOR + offset_x;
-            int scaled_y = y * TILE_SIZE * MINI_MAP_SCALE_FACTOR + offset_y;
-            int scaled_tile_size = TILE_SIZE * MINI_MAP_SCALE_FACTOR;
+            int scaled_x = (x * CUB_SIZE * MINI_MAP_SCALE_FACTOR) + offset_x;
+            int scaled_y = (y * CUB_SIZE * MINI_MAP_SCALE_FACTOR) + offset_y;
+            int scaled_tile_size = CUB_SIZE * MINI_MAP_SCALE_FACTOR + 1;
 
             if (game->map[y][x] == '1')
             {
@@ -58,32 +58,40 @@ void draw_map(t_game *game)
     }
 }
 
+int	get_texture_pixel(t_img *texture, int x, int y)
+{
+	int		pixel_color;
+	char	*pixel;
+
+	pixel = texture->addr + (y * texture->line_len + x * (texture->bpp / 8));
+	pixel_color = *(int *)pixel;
+	return (pixel_color);
+}
 
 void    draw_ray(t_game *game, t_ray *ray, int w_idx)
 {
-    t_point render_cord;
     t_point wall_cord;
     int     i;
 
-    i = 0;
-    render_cord.x = w_idx;
-    if (ray->wall_hit_face)
-        wall_cord.x = (int)ray->wall_hit.y % game->textures.width;
+    if (ray->wall_hit_face) 
+        wall_cord.x = (fmodf(ray->wall_hit.x, CUB_SIZE) / CUB_SIZE) * game->textures.width;
     else
-        wall_cord.x = (int)ray->wall_hit.x % game->textures.width;
+        wall_cord.x = (fmodf(ray->wall_hit.y, CUB_SIZE) / CUB_SIZE) * game->textures.width;
+    i = 0;
     while (i < ray->top_px)
     {
-        if (i > 150 || w_idx > 150)
+        if (i >= MINI_MAP_SIZE || w_idx >= MINI_MAP_SIZE)
             ft_mlx_pixel_put(&game->render_buf, w_idx, i, 0xFF3333);
         i++;
     }
     i = ray->top_px;
+    wall_cord.y = 0;
+    float step = (float)game->textures.height / (float)ray->wall_height;
     while (i < ray->botm_px)
     {
-        render_cord.y = i;//img
-        wall_cord.y = (i + (ray->wall_height / 2 -  WIN_HEIGHT / 2)) * game->textures.height / ray->wall_height;// texture
-        if (i > 150 || w_idx > 150)
-            ft_cpy_wall_px(&game->textures, &game->render_buf, &wall_cord, &render_cord);//copies
+        if (i >= MINI_MAP_SIZE || w_idx >= MINI_MAP_SIZE)
+            ft_mlx_pixel_put(&game->render_buf, w_idx, i, get_texture_pixel(&game->textures, wall_cord.x, wall_cord.y));
+        wall_cord.y += step;
         i++;
     }
     i = ray->botm_px;
@@ -103,10 +111,10 @@ void   draw_rectangle(t_game *game, int x, int y, int width, int height, int col
     while (i < y)
         ft_mlx_pixel_put(&game->render_buf, x, i++, 0x00110030);
     i = 0;
-    while (i < height && y + i < game->win_height)
+    while (i < height && y + i < game->map_height)
     {
         j = 0;
-        while (j < width && x + j < game->win_width && x + j >= 0 && y + i >= 0)
+        while (j < width && x + j < game->map_width && x + j >= 0 && y + i >= 0)
         {
             ft_mlx_pixel_put(&game->render_buf, x + j, y + i, color);
             j++;
@@ -114,7 +122,7 @@ void   draw_rectangle(t_game *game, int x, int y, int width, int height, int col
         i++;
     }
     i = y + height;
-    while (i < game->win_height)
+    while (i < game->map_height)
         ft_mlx_pixel_put(&game->render_buf, x, i++, 0x002230);
 }
 

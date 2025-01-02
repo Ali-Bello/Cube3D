@@ -43,8 +43,8 @@ void    set_width_height(t_game *data)
     i = 0;
     while (data->map[i])
         i++;
-    data->win_height = i * TILE_SIZE;
-    data->win_width = strlen(data->map[0]) * TILE_SIZE;
+    data->map_height = i;
+    data->map_width = strlen(data->map[0]);
 }
 
 void    init_game(t_game *data)
@@ -60,11 +60,9 @@ void    init_game(t_game *data)
     if (data->render_buf.img)
         data->render_buf.addr = mlx_get_data_addr(data->render_buf.img, &data->render_buf.bpp,
                         &data->render_buf.line_len, &data->render_buf.endian);
-    data->player.x = TILE_SIZE + 32;
-    data->player.y = TILE_SIZE + 32;
-    data->player.radius = 8;
+    data->player.x = CUB_SIZE + 32;
+    data->player.y = CUB_SIZE + 32;
     data->player.rot_angle = M_PI / 2;
-    data->rays = calloc(WIN_WIDTH, sizeof(t_ray));
     data->textures.img = mlx_xpm_file_to_image(data->mlx, "wall.xpm",\
                         &data->textures.width, &data->textures.height);
     data->textures.addr = mlx_get_data_addr(data->textures.img, &data->textures.bpp,\
@@ -78,7 +76,7 @@ void    check_allocations(t_game *data)
         perror("ERROR: mlx failed!\n");
         exit_routine(data);
     }
-    if (!data->map || !data->rays)
+    if (!data->map)
     {
         perror("ERROR: malloc failed!\n");
         exit_routine(data);

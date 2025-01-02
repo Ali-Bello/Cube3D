@@ -17,9 +17,8 @@ void draw_player(t_game *game)
     
     // Calculate perpendicular angle
     perpendicular_angle = game->player.rot_angle + (M_PI / 2);
-    
     // Draw player's direction lines
-    for (int i = -7; i < 10; i++)
+    for (int i = -7; i < 7; i++)
     {
         offset = i * MINI_MAP_SCALE_FACTOR;
         int start_x = x + cosf(perpendicular_angle) * offset;

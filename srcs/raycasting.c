@@ -40,7 +40,8 @@ t_point check_intersect(t_game *game, t_ray *ray, bool flag)
         if (!flag && !ray->facing_down)
             next_touch.y--;
         if (game->map[(int)(next_touch.y / CUB_SIZE)]\
-        [(int)(next_touch.x / CUB_SIZE)] == '1')
+        [(int)(next_touch.x / CUB_SIZE)] == '1' || game->map[(int)(next_touch.y / CUB_SIZE)]\
+        [(int)(next_touch.x / CUB_SIZE)] == 'D')
             return ((t_point){ray->start.x, ray->start.y, true});
         else
         {
@@ -56,7 +57,7 @@ t_point set_vert_intercept(t_game *game, t_ray *ray)
     t_point intercept;
 
     intercept.is_hit = false;
-    intercept.y = floorf(game->player.y / CUB_SIZE) * CUB_SIZE;
+    intercept.y = floor(game->player.y / CUB_SIZE) * CUB_SIZE;
     if (ray->facing_down)
         intercept.y += CUB_SIZE;
     intercept.x = game->player.x + (intercept.y - game->player.y) / ray->tan_ray_angle;

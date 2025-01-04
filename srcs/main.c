@@ -18,7 +18,7 @@ void draw_player(t_game *game)
     // Calculate perpendicular angle
     perpendicular_angle = game->player.rot_angle + (M_PI / 2);
     // Draw player's direction lines
-    for (int i = -7; i < 7; i++)
+    for (int i = 0; i < 1; i++)
     {
         offset = i * MINI_MAP_SCALE_FACTOR;
         int start_x = x + cosf(perpendicular_angle) * offset;
@@ -39,13 +39,15 @@ void    rays_cast(t_game *data)
     {
         cast_ray(data, &ray, angle);
         ray.plane_distance = (WIN_WIDTH / 2) / tanf(FOV / 2);
-        ray.wall_height = (CUB_SIZE / (ray.distance * cosf(angle - data->player.rot_angle))) * ray.plane_distance;
-        ray.top_px = (WIN_HEIGHT / 2) - (ray.wall_height / 2);
-        if (ray.top_px < 0)
-            ray.top_px = 0;
+        ray.wall_height = (CUB_SIZE / (ray.distance * cosf(angle - data->player.rot_angle)))\
+                        * ray.plane_distance;
+        ray.top_px = (WIN_HEIGHT - ray.wall_height) / 2;
+        // if (ray.top_px < 0)
+        //     ray.top_px = 0;
         ray.botm_px = ray.top_px + ray.wall_height;
-        if (ray.botm_px > WIN_HEIGHT)
-            ray.botm_px = WIN_HEIGHT;
+        // if (ray.botm_px > WIN_HEIGHT)
+        //     ray.botm_px = WIN_HEIGHT;
+        
         draw_ray(data, &ray, i);
         angle += FOV / WIN_WIDTH;
         i++;
@@ -81,7 +83,6 @@ int update(t_game *data)
     mlx_put_image_to_window(data->mlx, data->win, data->render_buf.img, 0, 0);
     return (0);
 }
-
 
 int main()
 {

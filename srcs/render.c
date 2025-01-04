@@ -12,20 +12,12 @@
 
 #include "../includes/cub3d.h"
 
-void    ft_cpy_wall_px(t_img *src, t_img *dst, t_point *src_pos, t_point *dst_pos) 
-{
-    char *dst_px;
-    char *src_px;
-
-    dst_px = dst->addr + ((int)(dst_pos->y * dst->line_len) + (int)(dst_pos->x * (dst->bpp / 8)));
-    src_px = &src->addr[(int)(src_pos->y * src->line_len) + (int)(src_pos->x * (src->bpp / 8))];
-    memcpy(dst_px, src_px, src->bpp / 8);
-}
-
 void    ft_mlx_pixel_put(t_img *data, int x, int y, int color)
 {
     char    *dst;
 
+    if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
+        return ;
     dst = data->addr + (y * data->line_len + x * (data->bpp / 8));
     *(unsigned int *)dst = color;
 }
@@ -63,20 +55,27 @@ int	get_texture_pixel(t_img *texture, int x, int y)
 	int		pixel_color;
 	char	*pixel;
 
-	pixel = texture->addr + (y * texture->line_len + x * (texture->bpp / 8));
-	pixel_color = *(int *)pixel;
+    if (x < 0 || x >= texture->width || y < 0 || y >= texture->height)
+        return (0);
+    pixel = texture->addr + (y * texture->line_len + x * (texture->bpp / 8));
+    pixel_color = *(int *)pixel;
 	return (pixel_color);
 }
 
 void    draw_ray(t_game *game, t_ray *ray, int w_idx)
 {
     t_point wall_cord;
+    t_img   *texture;
+
     int     i;
 
+    texture = &game->textures[0];
+    if (game->map[(int)(ray->wall_hit.y / CUB_SIZE)][(int)(ray->wall_hit.x / CUB_SIZE)] == 'D')
+        texture = &game->textures[1];
     if (ray->wall_hit_face) 
-        wall_cord.x = (fmodf(ray->wall_hit.x, CUB_SIZE) / CUB_SIZE) * game->textures.width;
+        wall_cord.x = (fmodf(ray->wall_hit.x, CUB_SIZE) / CUB_SIZE) * texture->width;
     else
-        wall_cord.x = (fmodf(ray->wall_hit.y, CUB_SIZE) / CUB_SIZE) * game->textures.width;
+        wall_cord.x = (fmodf(ray->wall_hit.y, CUB_SIZE) / CUB_SIZE) * texture->width;
     i = 0;
     while (i < ray->top_px)
     {
@@ -86,11 +85,19 @@ void    draw_ray(t_game *game, t_ray *ray, int w_idx)
     }
     i = ray->top_px;
     wall_cord.y = 0;
-    float step = (float)game->textures.height / (float)ray->wall_height;
+    float step = (float)texture->height / (float)ray->wall_height;
+    if (i < 0)
+    {
+        i = 0;
+        wall_cord.y = (0 - ray->top_px) * step;
+    }
+    if (ray->botm_px > WIN_HEIGHT)
+        ray->botm_px = WIN_HEIGHT;
     while (i < ray->botm_px)
     {
         if (i >= MINI_MAP_SIZE || w_idx >= MINI_MAP_SIZE)
-            ft_mlx_pixel_put(&game->render_buf, w_idx, i, get_texture_pixel(&game->textures, wall_cord.x, wall_cord.y));
+            ft_mlx_pixel_put(&game->render_buf, w_idx, i,\
+            get_texture_pixel(texture, wall_cord.x, wall_cord.y));
         wall_cord.y += step;
         i++;
     }

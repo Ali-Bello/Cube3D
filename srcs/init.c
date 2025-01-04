@@ -27,8 +27,8 @@ char    **create_map()
     map[7] = strdup("10001100000000000000000000001");
     map[8] = strdup("10001000000000000000000000001");
     map[9] = strdup("10000000000000000000000000001");
-    map[10] = strdup("10000000000000001000000000001");
-    map[11] = strdup("10000000000000001000000000001");
+    map[10] = strdup("100000000000011D1000000000001");
+    map[11] = strdup("10000000000001001000000000001");
     map[12] = strdup("11111111111111111111111111111");
     map[13] = NULL;
     return (map);
@@ -63,10 +63,15 @@ void    init_game(t_game *data)
     data->player.x = CUB_SIZE + 32;
     data->player.y = CUB_SIZE + 32;
     data->player.rot_angle = M_PI / 2;
-    data->textures.img = mlx_xpm_file_to_image(data->mlx, "wall.xpm",\
-                        &data->textures.width, &data->textures.height);
-    data->textures.addr = mlx_get_data_addr(data->textures.img, &data->textures.bpp,\
-                        &data->textures.line_len, &data->textures.endian);
+    data->textures[0].img = mlx_xpm_file_to_image(data->mlx, "wall.xpm",\
+                        &data->textures[0].width, &data->textures[0].height);
+    data->textures[0].addr = mlx_get_data_addr(data->textures[0].img, &data->textures[0].bpp,\
+                        &data->textures[0].line_len, &data->textures[0].endian);
+    data->textures[1].img = mlx_xpm_file_to_image(data->mlx, "wall2.xpm",\
+                        &data->textures[1].width, &data->textures[1].height);
+    data->textures[1].addr = mlx_get_data_addr(data->textures[1].img, &data->textures[1].bpp,\
+                        &data->textures[1].line_len, &data->textures[1].endian);
+    
 }
 
 void    check_allocations(t_game *data)

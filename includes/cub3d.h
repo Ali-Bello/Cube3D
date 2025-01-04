@@ -36,7 +36,7 @@
 #define WALK_SPEED 2.0
 #define ROT_SPEED 1.0 * (M_PI / 180)
 #define MINI_MAP_SIZE 150
-#define MINI_MAP_SCALE_FACTOR 0.5
+#define MINI_MAP_SCALE_FACTOR 0.45
 
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
@@ -104,7 +104,7 @@ typedef struct s_game
     char        **map;
     t_player    player;
     t_img       render_buf;
-    t_img       textures;
+    t_img       textures[4];
 } t_game;
 
     //////////// INITIALIZING /////////////

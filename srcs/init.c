@@ -63,15 +63,26 @@ void    init_game(t_game *data)
     data->player.x = CUB_SIZE + 32;
     data->player.y = CUB_SIZE + 32;
     data->player.rot_angle = M_PI / 2;
-    data->textures[0].img = mlx_xpm_file_to_image(data->mlx, "wall.xpm",\
+    data->textures[0].img = mlx_xpm_file_to_image(data->mlx, "no_wall.xpm",\
                         &data->textures[0].width, &data->textures[0].height);
     data->textures[0].addr = mlx_get_data_addr(data->textures[0].img, &data->textures[0].bpp,\
                         &data->textures[0].line_len, &data->textures[0].endian);
-    data->textures[1].img = mlx_xpm_file_to_image(data->mlx, "wall2.xpm",\
+    data->textures[1].img = mlx_xpm_file_to_image(data->mlx, "so_wall.xpm",\
                         &data->textures[1].width, &data->textures[1].height);
     data->textures[1].addr = mlx_get_data_addr(data->textures[1].img, &data->textures[1].bpp,\
                         &data->textures[1].line_len, &data->textures[1].endian);
-    
+    data->textures[2].img = mlx_xpm_file_to_image(data->mlx, "ea_wall.xpm",\
+                        &data->textures[2].width, &data->textures[2].height);
+    data->textures[2].addr = mlx_get_data_addr(data->textures[2].img, &data->textures[2].bpp,\
+                        &data->textures[2].line_len, &data->textures[2].endian);
+    data->textures[3].img = mlx_xpm_file_to_image(data->mlx, "we_wall.xpm",\
+                        &data->textures[3].width, &data->textures[3].height);
+    data->textures[3].addr = mlx_get_data_addr(data->textures[3].img, &data->textures[3].bpp,\
+                        &data->textures[3].line_len, &data->textures[3].endian);
+    data->textures[4].img = mlx_xpm_file_to_image(data->mlx, "door.xpm",\
+                        &data->textures[4].width, &data->textures[4].height);
+    data->textures[4].addr = mlx_get_data_addr(data->textures[4].img, &data->textures[4].bpp,\
+                        &data->textures[4].line_len, &data->textures[4].endian);
 }
 
 void    check_allocations(t_game *data)

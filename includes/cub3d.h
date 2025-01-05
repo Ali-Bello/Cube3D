@@ -78,7 +78,7 @@ typedef struct s_point
 
 typedef struct s_ray
 {
-    float   tan_ray_angle;
+    float   angle_tan;
     float   x_step;
     float   y_step;
     float   distance;
@@ -104,7 +104,7 @@ typedef struct s_game
     char        **map;
     t_player    player;
     t_img       render_buf;
-    t_img       textures[4];
+    t_img       textures[5];
 } t_game;
 
     //////////// INITIALIZING /////////////
@@ -118,7 +118,7 @@ void    check_allocations(t_game *data);
 
 float   normalize_angle(float angle);
 float   distance_from_origin(t_player *player, float x, float y);
-void    cast_ray(t_game *game, t_ray *ray, float ray_angle);
+void    cast_ray(t_game *game, t_ray *ray, float angle);
 
     //////////////////////////////////////
 
@@ -141,8 +141,7 @@ int key_release(int key, t_game *game);
     ////////////  RENDER  /////////////////
 
 void    ft_mlx_pixel_put(t_img *data, int x, int y, int color);
-void	ft_cpy_wall_px(t_img *src, t_img *dst, t_point *src_pos, t_point *dst_pos);
-void    draw_map(t_game *game);
+void    draw_mini_map(t_game *game);
 void    draw_player(t_game *game);
 void    draw_ray(t_game *game, t_ray *ray, int w_idx);
 void    draw_rectangle(t_game *game, int x, int y, int width, int height, int color);

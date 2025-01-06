@@ -38,10 +38,22 @@ void    rays_cast(t_game *data)
     }
 }
 
-bool    wall_collision_check(char **map, float x, float y)
+bool    wall_collision_check(char **map, float x, float y, float buffer)
 {
-    if (map[(int)(floorf(y) / CUB_SIZE)][(int)(floorf(x) / CUB_SIZE)] == '1')
+    int map_x = (int)(floorf(x) / CUB_SIZE);
+    int map_y = (int)(floorf(y) / CUB_SIZE);
+
+    // Check the main position
+    if (map[map_y][map_x] == '1')
         return (true);
+
+    // Check the buffer area around the player
+    if (map[(int)(floorf(y - buffer) / CUB_SIZE)][(int)(floorf(x) / CUB_SIZE)] == '1' ||
+        map[(int)(floorf(y + buffer) / CUB_SIZE)][(int)(floorf(x) / CUB_SIZE)] == '1' ||
+        map[(int)(floorf(y) / CUB_SIZE)][(int)(floorf(x - buffer) / CUB_SIZE)] == '1' ||
+        map[(int)(floorf(y) / CUB_SIZE)][(int)(floorf(x + buffer) / CUB_SIZE)] == '1')
+        return (true);
+
     return (false);
 }
 
@@ -55,12 +67,19 @@ int update(t_game *data)
     draw_mini_map(data);
     move_step = data->player.walk_dir * WALK_SPEED;
     data->player.rot_angle += (data->player.turn_dir * ROT_SPEED);
-    next_map_player_x = data->player.x + cosf(data->player.rot_angle) * move_step;
-    next_map_player_y = data->player.y + sinf(data->player.rot_angle) * move_step;
-    if (!wall_collision_check(data->map, next_map_player_x, next_map_player_y))
+    next_map_player_x = data->player.x + (cosf(data->player.rot_angle) * move_step);
+    next_map_player_y = data->player.y + (sinf(data->player.rot_angle) * move_step);
+    if (!wall_collision_check(data->map, next_map_player_x, next_map_player_y, 10.0))
     {
         data->player.x = next_map_player_x;
         data->player.y = next_map_player_y;
+    }
+    else
+    {
+        if (!wall_collision_check(data->map, next_map_player_x, data->player.y, 10.0))
+            data->player.x = next_map_player_x;
+        else if (!wall_collision_check(data->map, data->player.x, next_map_player_y, 10.0))
+            data->player.y = next_map_player_y;
     }
     rays_cast(data);
     draw_player(data);
@@ -77,6 +96,8 @@ int main()
     mlx_hook(data.win, 17, 0, exit_routine, &data);
     mlx_hook(data.win, 2, (1L<<0), key_press, &data);
     mlx_hook(data.win, 3, (1L<<1), key_release, &data);
+    mlx_mouse_move(data.mlx, data.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+    mlx_hook(data.win, 6, (1L<<6), mouse_move, &data);
     mlx_loop_hook(data.mlx, &update, &data);
     mlx_loop(data.mlx); 
     return (0);

@@ -95,36 +95,43 @@ void    draw_bounds_line(t_game *game, int start, int end, int x, int color)
         start++;
     }
 }
-
-void    draw_ray(t_game *game, t_ray *ray, int w_idx)
+float   set_texture_cordinates(t_ray *ray, t_img *texture, t_point *cords)
 {
-    t_point wall_cord;
-    t_img   *texture;
-    int     i;
-    float   step;
+    float step;
 
-    texture = &game->textures[get_texture_id(game, ray)];
     if (ray->wall_hit_face) 
-        wall_cord.x = (fmodf(ray->wall_hit.x, CUB_SIZE) / CUB_SIZE) * texture->width;
+        cords->x = (fmodf(ray->wall_hit.x, CUB_SIZE) / CUB_SIZE) * texture->width;
     else
-        wall_cord.x = (fmodf(ray->wall_hit.y, CUB_SIZE) / CUB_SIZE) * texture->width;
-    draw_bounds_line(game, 0, ray->top_px, w_idx, 0x4242AA);
-    i = ray->top_px;
-    wall_cord.y = 0;
+        cords->x = (fmodf(ray->wall_hit.y, CUB_SIZE) / CUB_SIZE) * texture->width;
+    cords->y = 0;
     step = (float)texture->height / (float)ray->wall_height;
-    if (i < 0)
+    if (ray->botm_px - ray->top_px > WIN_HEIGHT)
     {
-        i = ray->top_px > 0 ? ray->top_px : 0;
-        wall_cord.y = (0 - ray->top_px) * step;
+        cords->y = (float)(0 - ray->top_px) * step;
+        ray->top_px = 0;
     }
     if (ray->botm_px > WIN_HEIGHT)
         ray->botm_px = WIN_HEIGHT;
+    return (step);
+}
+
+void    draw_ray(t_game *game, t_ray *ray, int w_idx)
+{
+    t_point tex_cord;
+    t_img   *texture;
+    int     i;
+    float     step;
+
+    texture = &game->textures[get_texture_id(game, ray)];
+    draw_bounds_line(game, 0, ray->top_px, w_idx, 0x4242AA);
+    step = set_texture_cordinates(ray, texture, &tex_cord);
+    i = ray->top_px;
     while (i < ray->botm_px)
     {
         if (i >= MINI_MAP_SIZE || w_idx >= MINI_MAP_SIZE)
             ft_mlx_pixel_put(&game->render_buf, w_idx, i,\
-            get_texture_pixel(texture, wall_cord.x, wall_cord.y));
-        wall_cord.y += step;
+            get_texture_pixel(texture, tex_cord.x, tex_cord.y));
+        tex_cord.y += step;
         i++;
     }
     draw_bounds_line(game, ray->botm_px, WIN_HEIGHT, w_idx, 0x42AA6B);

@@ -29,14 +29,14 @@
 #define LEFT 65361
 #define RIGHT 65363
 #define ESC 65307
-#define CUB_SIZE 64
+#define CUB_SIZE 64 
 #define FOV 60 * (M_PI / 180)
-#define WIN_WIDTH  1920
-#define WIN_HEIGHT 1080
-#define WALK_SPEED 2.0
-#define ROT_SPEED 1.0 * (M_PI / 180)
+#define WIN_WIDTH  1280
+#define WIN_HEIGHT 720
+#define WALK_SPEED 0.5
+#define ROT_SPEED 0.5 * (M_PI / 180)
 #define MINI_MAP_SIZE 150
-#define MINI_MAP_SCALE_FACTOR 0.45
+#define MINI_MAP_SCALE_FACTOR 0.40
 
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
@@ -67,6 +67,8 @@ typedef struct s_player
     float   rot_angle;
     char    walk_dir; // 1 walk forward, -1 walk backward 
     char    turn_dir; // 1 turn right, -1 turn left
+    int     mouse_x;
+    int     mouse_y;
 } t_player;
 
 typedef struct s_point
@@ -83,7 +85,7 @@ typedef struct s_ray
     float   y_step;
     float   distance;
     float   plane_distance;
-    int     wall_height;
+    float     wall_height;
     int     top_px;
     int     botm_px;
     bool    facing_down;
@@ -135,7 +137,7 @@ void    draw_line(t_game *game, int x0, int y0, int x1, int y1, int color);
 int exit_routine(t_game *game);
 int key_press(int key, t_game *game);
 int key_release(int key, t_game *game);
-
+int mouse_move(int x, int y, t_game *game);
     //////////////////////////////////////
 
     ////////////  RENDER  /////////////////

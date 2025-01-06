@@ -35,12 +35,14 @@ t_point check_intersection(t_game *game, t_ray *ray, bool flag)
     {
         next_touch.x = ray->start.x;
         if (flag && ray->facing_left)
-            next_touch.x--;
+            next_touch.x -= 0.1;
         next_touch.y = ray->start.y;
         if (!flag && !ray->facing_down)
-            next_touch.y--;
+            next_touch.y -= 0.1;
         if (game->map[(int)(next_touch.y / CUB_SIZE)]\
-        [(int)(next_touch.x / CUB_SIZE)] == '1' || game->map[(int)(next_touch.y / CUB_SIZE)]\
+        [(int)(next_touch.x / CUB_SIZE)] == '1')
+            return ((t_point){ray->start.x, ray->start.y, true});
+        else if (game->map[(int)(next_touch.y / CUB_SIZE)]\
         [(int)(next_touch.x / CUB_SIZE)] == 'D')
             return ((t_point){next_touch.x, next_touch.y, true});
         else

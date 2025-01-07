@@ -23,17 +23,17 @@ void    rays_cast(t_game *data)
     t_ray   ray;
 
     i = 0;
-    angle = data->player.rot_angle - (FOV / 2);
+    angle = data->player.rot_angle - (FOV / 2.0);
     while (i < WIN_WIDTH)
     {
         cast_ray(data, &ray, angle);
-        ray.plane_distance = (WIN_WIDTH / 2) / tanf(FOV / 2);
+        ray.plane_distance = (WIN_WIDTH / 2.0) / tanf(FOV / 2.0);
         ray.wall_height = (CUB_SIZE / (ray.distance * cosf(angle - data->player.rot_angle)))\
                         * ray.plane_distance;
-        ray.top_px = (WIN_HEIGHT - ray.wall_height) / 2;
+        ray.top_px = (WIN_HEIGHT - ray.wall_height) / 2.0;
         ray.botm_px = ray.top_px + ray.wall_height;
         draw_ray(data, &ray, i);
-        angle += FOV / WIN_WIDTH;
+        angle += (FOV / WIN_WIDTH);
         i++;
     }
 }
@@ -62,13 +62,26 @@ int update(t_game *data)
     float   move_step;
     float   next_map_player_x;
     float   next_map_player_y;
+    int     x;
+    int     y;
+    int     dx;
 
-    mlx_clear_window(data->mlx, data->win);
+
+    mlx_mouse_get_pos(data->mlx, data->win, &x, &y);
+    dx = (x - WIN_WIDTH / 2);
+
+    if (dx != 0)
+    {
+        data->player.rot_angle += ROT_SPEED * dx / 10.0; // Adjust the divisor for sensitivity
+        mlx_mouse_move(data->mlx, data->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+    }
+    data->last_mouse_x = WIN_WIDTH / 2;
+    // mlx_clear_window(data->mlx, data->win);
     draw_mini_map(data);
     move_step = data->player.walk_dir * WALK_SPEED;
-    data->player.rot_angle += (data->player.turn_dir * ROT_SPEED);
     next_map_player_x = data->player.x + (cosf(data->player.rot_angle) * move_step);
     next_map_player_y = data->player.y + (sinf(data->player.rot_angle) * move_step);
+    data->player.rot_angle += (data->player.turn_dir * ROT_SPEED);
     if (!wall_collision_check(data->map, next_map_player_x, next_map_player_y, 10.0))
     {
         data->player.x = next_map_player_x;
@@ -93,11 +106,10 @@ int main()
 
     init_game(&data);
     check_allocations(&data);
+    mlx_mouse_hide(data.mlx, data.win);
     mlx_hook(data.win, 17, 0, exit_routine, &data);
     mlx_hook(data.win, 2, (1L<<0), key_press, &data);
     mlx_hook(data.win, 3, (1L<<1), key_release, &data);
-    mlx_mouse_move(data.mlx, data.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
-    mlx_hook(data.win, 6, (1L<<6), mouse_move, &data);
     mlx_loop_hook(data.mlx, &update, &data);
     mlx_loop(data.mlx); 
     return (0);

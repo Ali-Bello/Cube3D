@@ -9,7 +9,7 @@ END			:=	\033[0m
 
 NAME = cub3d
 
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3 -O3	
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address -g3 -O3
 
 MLX_FLAGS = -lXext -lX11 -lm
 

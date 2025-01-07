@@ -22,7 +22,7 @@ float   normalize_angle(float angle)
 
 float    distance_from_origin(t_player *player, float x, float y)
 {
-    return (sqrtf((x - player->x) * (x - player->x) + (y - player->y) * (y - player->y)));
+    return (sqrtf(((x - player->x) * (x - player->x)) + ((y - player->y) * (y - player->y))));
 }
 
 t_point check_intersection(t_game *game, t_ray *ray, bool flag)
@@ -40,11 +40,10 @@ t_point check_intersection(t_game *game, t_ray *ray, bool flag)
         if (!flag && !ray->facing_down)
             next_touch.y -= 0.1;
         if (game->map[(int)(next_touch.y / CUB_SIZE)]\
-        [(int)(next_touch.x / CUB_SIZE)] == '1')
-            return ((t_point){ray->start.x, ray->start.y, true});
-        else if (game->map[(int)(next_touch.y / CUB_SIZE)]\
+        [(int)(next_touch.x / CUB_SIZE)] == '1' || game->map[(int)(next_touch.y / CUB_SIZE)]\
         [(int)(next_touch.x / CUB_SIZE)] == 'D')
-            return ((t_point){next_touch.x, next_touch.y, true});
+            return ((t_point){ray->start.x, ray->start.y, true});
+
         else
         {
             ray->start.x += ray->x_step;

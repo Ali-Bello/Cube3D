@@ -12,16 +12,6 @@
 
 #include "../includes/cub3d.h"
 
-int mouse_move(int x, int y, t_game *game)
-{
-    (void)y;
-
-    if (x < WIN_WIDTH / 2)
-        game->player.turn_dir = -1;
-    else if (x != WIN_WIDTH / 2)
-        game->player.turn_dir = 1;
-    return (0);
-}
 int exit_routine(t_game *game)
 {
     int i;
@@ -56,6 +46,7 @@ int key_press(int key, t_game *game)
         game->player.walk_dir = -1;
     else if (key == D)
         game->player.turn_dir = 1;
+    game->player.rot_angle += (game->player.turn_dir * ROT_SPEED);
     return (0);
 }
 

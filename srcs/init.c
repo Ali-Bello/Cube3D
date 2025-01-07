@@ -27,7 +27,7 @@ char    **create_map()
     map[7] = strdup("10001100000000000000000000001");
     map[8] = strdup("10001000000000000000000000001");
     map[9] = strdup("10001000000000000000000000001");
-    map[10] = strdup("10001000000110100000000000001");
+    map[10] = strdup("1000100000011D1D0000000000001");
     map[11] = strdup("10001000000100100000000000001");
     map[12] = strdup("11111111111111111111111111111");
     map[13] = NULL;
@@ -83,6 +83,7 @@ void    init_game(t_game *data)
                         &data->textures[4].width, &data->textures[4].height);
     data->textures[4].addr = mlx_get_data_addr(data->textures[4].img, &data->textures[4].bpp,\
                         &data->textures[4].line_len, &data->textures[4].endian);
+    data->last_mouse_x = -1;
 }
 
 void    check_allocations(t_game *data)

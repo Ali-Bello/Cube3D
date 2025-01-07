@@ -21,6 +21,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
+#include <time.h>
+#include <sys/time.h>
+#include <X11/keysym.h>
+#include <X11/X.h>
 
 #define D 100
 #define W 119
@@ -34,7 +38,7 @@
 #define WIN_WIDTH  1280
 #define WIN_HEIGHT 720
 #define WALK_SPEED 0.5
-#define ROT_SPEED 0.5 * (M_PI / 180)
+#define ROT_SPEED 0.25 * (M_PI / 180)
 #define MINI_MAP_SIZE 150
 #define MINI_MAP_SCALE_FACTOR 0.40
 
@@ -107,6 +111,7 @@ typedef struct s_game
     t_player    player;
     t_img       render_buf;
     t_img       textures[5];
+    int         last_mouse_x;
 } t_game;
 
     //////////// INITIALIZING /////////////
@@ -138,6 +143,7 @@ int exit_routine(t_game *game);
 int key_press(int key, t_game *game);
 int key_release(int key, t_game *game);
 int mouse_move(int x, int y, t_game *game);
+time_t	get_timestamp(void);
     //////////////////////////////////////
 
     ////////////  RENDER  /////////////////

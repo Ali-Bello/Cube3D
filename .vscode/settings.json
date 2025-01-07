@@ -2,6 +2,12 @@
     "files.associations": {
         "cub3d.h": "c",
         "math.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "stdio.h": "c",
+        "unistd.h": "c",
+        "stdbool.h": "c",
+        "limits.h": "c",
+        "stdlib.h": "c",
+        "mlx.h": "c"
     }
 }

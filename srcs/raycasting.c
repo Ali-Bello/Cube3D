@@ -98,11 +98,11 @@ void    set_distances(t_game *game, t_ray *ray, float *horz, float *vert)
     if (ray->horiz_wall_hit.is_hit)
         *horz = distance_from_origin(&game->player, ray->horiz_wall_hit.x, ray->horiz_wall_hit.y);
     else
-        *horz = INFINITY;
+        *horz = INT_MAX;
     if (ray->vert_wall_hit.is_hit)
         *vert = distance_from_origin(&game->player, ray->vert_wall_hit.x, ray->vert_wall_hit.y);
     else
-        *vert = INFINITY;
+        *vert = INT_MAX;
 }
 
 void    perform_dda(t_game *game, t_ray *ray)

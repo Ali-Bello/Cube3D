@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
-#define CUB3D_H
+# define CUB3D_H
 
 #include "mlx.h"
 #include <stdio.h>
@@ -33,14 +33,14 @@
 #define LEFT 65361
 #define RIGHT 65363
 #define ESC 65307
-#define CUB_SIZE 64 
+#define CUB_SIZE 32
 #define FOV 60 * (M_PI / 180)
 #define WIN_WIDTH  1280
 #define WIN_HEIGHT 720
 #define WALK_SPEED 0.5
 #define ROT_SPEED 0.25 * (M_PI / 180)
 #define MINI_MAP_SIZE 150
-#define MINI_MAP_SCALE_FACTOR 0.40
+#define MINI_MAP_SCALE_FACTOR 0.75
 
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"

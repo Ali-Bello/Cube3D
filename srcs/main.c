@@ -7,13 +7,13 @@ void draw_player(t_game *game)
 
     x = MINI_MAP_SIZE / 2;
     y = x;
-    draw_circle(game, x, y, 10 * MINI_MAP_SCALE_FACTOR, 0xFF0000);
-    draw_line(game,
-    x,
-    y,
-    x + cosf(game->player.rot_angle) * 25 * MINI_MAP_SCALE_FACTOR,
-    y + sinf(game->player.rot_angle) * 25 * MINI_MAP_SCALE_FACTOR,
-    0xFF0000);
+    draw_circle(game, x, y, 5 * MINI_MAP_SCALE_FACTOR, 0xFF0000);
+    // draw_line(game,
+    // x,
+    // y,
+    // x + cosf(game->player.rot_angle) * 25 * MINI_MAP_SCALE_FACTOR,
+    // y + sinf(game->player.rot_angle) * 25 * MINI_MAP_SCALE_FACTOR,
+    // 0xFF0000);
 }
 
 void    rays_cast(t_game *data)
@@ -24,6 +24,8 @@ void    rays_cast(t_game *data)
 
     i = 0;
     angle = data->player.rot_angle - (FOV / 2.0);
+    int offset_x = MINI_MAP_SIZE / 2 - (data->player.x * MINI_MAP_SCALE_FACTOR);
+    int offset_y = MINI_MAP_SIZE / 2 - (data->player.y * MINI_MAP_SCALE_FACTOR);
     while (i < WIN_WIDTH)
     {
         cast_ray(data, &ray, angle);
@@ -32,7 +34,10 @@ void    rays_cast(t_game *data)
                         * ray.plane_distance;
         ray.top_px = (WIN_HEIGHT - ray.wall_height) / 2.0;
         ray.botm_px = ray.top_px + ray.wall_height;
+        int mini_x = (ray.wall_hit.x * MINI_MAP_SCALE_FACTOR) + offset_x;
+        int mini_y = (ray.wall_hit.y * MINI_MAP_SCALE_FACTOR) + offset_y;
         draw_ray(data, &ray, i);
+        draw_line(data, MINI_MAP_SIZE / 2, MINI_MAP_SIZE / 2, mini_x, mini_y, 0x000FF);
         angle += (FOV / WIN_WIDTH);
         i++;
     }

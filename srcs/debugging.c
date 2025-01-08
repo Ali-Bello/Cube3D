@@ -46,7 +46,7 @@ void draw_line(t_game *game, int x0, int y0, int x1, int y1, int color)
     while (1)
     {
         ft_mlx_pixel_put(&game->render_buf, x0, y0, color);
-        if (x0 == x1 && y0 == y1)
+        if ((x0 == x1 && y0 == y1) || (x0 >= MINI_MAP_SIZE || y0 >= MINI_MAP_SIZE))
             break;
         int e2 = err * 2;
         if (e2 > -dy)

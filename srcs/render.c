@@ -115,12 +115,32 @@ float   set_texture_cordinates(t_ray *ray, t_img *texture, t_point *cords)
     return (step);
 }
 
-void    draw_ray(t_game *game, t_ray *ray, int w_idx)
+int shade_color(int color, float distance, bool is_vertical)
+{
+    int r;
+    int g;
+    int b;
+    float shade_factor;
+    
+    shade_factor = fminf(1.0, 1.0 / (distance * 0.005));
+    
+    if (is_vertical)
+        shade_factor *= 0.85;
+
+    r = ((color >> 16) & 0xFF) * shade_factor;
+    g = ((color >> 8) & 0xFF) * shade_factor;
+    b = (color & 0xFF) * shade_factor;
+
+    return ((r << 16) | (g << 8) | b);
+}
+
+void draw_ray(t_game *game, t_ray *ray, int w_idx)
 {
     t_point tex_cord;
     t_img   *texture;
     int     i;
-    float     step;
+    float   step;
+    int     color;
 
     texture = &game->textures[get_texture_id(game, ray)];
     draw_bounds_line(game, 0, ray->top_px, w_idx, 0x4242AA);
@@ -129,10 +149,14 @@ void    draw_ray(t_game *game, t_ray *ray, int w_idx)
     while (i < ray->botm_px)
     {
         if (i >= MINI_MAP_SIZE || w_idx >= MINI_MAP_SIZE)
-            ft_mlx_pixel_put(&game->render_buf, w_idx, i,\
-            get_texture_pixel(texture, tex_cord.x, tex_cord.y));
+        {
+            color = get_texture_pixel(texture, tex_cord.x, tex_cord.y);
+            color = shade_color(color, ray->distance, ray->wall_hit_face);
+            ft_mlx_pixel_put(&game->render_buf, w_idx, i, color);
+        }
         tex_cord.y += step;
         i++;
     }
     draw_bounds_line(game, ray->botm_px, WIN_HEIGHT, w_idx, 0x42AA6B);
 }
+

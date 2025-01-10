@@ -42,13 +42,9 @@ t_point check_intersection(t_game *game, t_ray *ray, bool flag)
         if (game->map[(int)(next_touch.y / CUB_SIZE)]\
         [(int)(next_touch.x / CUB_SIZE)] == '1' || game->map[(int)(next_touch.y / CUB_SIZE)]\
         [(int)(next_touch.x / CUB_SIZE)] == 'D')
-            return ((t_point){ray->start.x, ray->start.y, true});
-
-        else
-        {
-            ray->start.x += ray->x_step;
-            ray->start.y += ray->y_step;
-        }
+            return ((t_point){next_touch.x, next_touch.y, true});
+        ray->start.x += ray->x_step;
+        ray->start.y += ray->y_step;
     }
     return (next_touch);
 }
@@ -129,7 +125,6 @@ void    perform_dda(t_game *game, t_ray *ray)
 void    cast_ray(t_game *game, t_ray *ray, float angle)
 {
     memset(ray, 0, sizeof(t_ray));
-
     angle = normalize_angle(angle);
     ray->angle_tan = tanf(angle);
     ray->facing_down = angle > 0 && angle < M_PI;
@@ -142,4 +137,7 @@ void    cast_ray(t_game *game, t_ray *ray, float angle)
     ray->horiz_wall_hit = check_intersection(game, ray, 1);
 
     perform_dda(game, ray);
+    ray->wall_height = (CUB_SIZE / (ray->distance * cosf(angle - game->player.rot_angle))) * game->plane_distance;
+    ray->top_px = (WIN_HEIGHT - ray->wall_height) / 2.0;
+    ray->botm_px = ray->top_px + ray->wall_height;
 }

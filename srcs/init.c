@@ -84,6 +84,7 @@ void    init_game(t_game *data)
     data->textures[4].addr = mlx_get_data_addr(data->textures[4].img, &data->textures[4].bpp,\
                         &data->textures[4].line_len, &data->textures[4].endian);
     data->last_mouse_x = -1;
+    data->plane_distance = (WIN_WIDTH / 2) / tanf(FOV / 2);
 }
 
 void    check_allocations(t_game *data)

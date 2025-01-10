@@ -54,10 +54,6 @@ void    draw_mini_map(t_game *game)
                 draw_square(game, (j * CUB_SIZE * MINI_MAP_SCALE_FACTOR) + offset.x,
                 (i * CUB_SIZE * MINI_MAP_SCALE_FACTOR) + offset.y,
                 scaled_size, 0xAAAAAAA);
-            else
-                draw_square(game, (j * CUB_SIZE * MINI_MAP_SCALE_FACTOR) + offset.x,
-                (i * CUB_SIZE * MINI_MAP_SCALE_FACTOR) + offset.y,
-                scaled_size, 0x000000);
         }
     }
 }
@@ -122,7 +118,7 @@ int shade_color(int color, float distance, bool is_vertical)
     int b;
     float shade_factor;
     
-    shade_factor = fminf(1.0, 1.0 / (distance * 0.005));
+    shade_factor = fminf(1.0, 1.0 / (distance * 0.009));
     
     if (is_vertical)
         shade_factor *= 0.85;
@@ -146,6 +142,7 @@ void draw_ray(t_game *game, t_ray *ray, int w_idx)
     draw_bounds_line(game, 0, ray->top_px, w_idx, 0x4242AA);
     step = set_texture_cordinates(ray, texture, &tex_cord);
     i = ray->top_px;
+
     while (i < ray->botm_px)
     {
         if (i >= MINI_MAP_SIZE || w_idx >= MINI_MAP_SIZE)

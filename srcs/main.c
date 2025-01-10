@@ -2,18 +2,7 @@
 
 void draw_player(t_game *game)
 {
-    int x;
-    int y;
-
-    x = MINI_MAP_SIZE / 2;
-    y = x;
-    draw_circle(game, x, y, 5 * MINI_MAP_SCALE_FACTOR, 0xFF0000);
-    // draw_line(game,
-    // x,
-    // y,
-    // x + cosf(game->player.rot_angle) * 25 * MINI_MAP_SCALE_FACTOR,
-    // y + sinf(game->player.rot_angle) * 25 * MINI_MAP_SCALE_FACTOR,
-    // 0xFF0000);
+    draw_circle(game, MINI_MAP_SIZE / 2 , MINI_MAP_SIZE / 2, 7.5 * MINI_MAP_SCALE_FACTOR, 0xFF0000);
 }
 
 void    rays_cast(t_game *data)
@@ -24,21 +13,17 @@ void    rays_cast(t_game *data)
 
     i = 0;
     angle = data->player.rot_angle - (FOV / 2.0);
-    int offset_x = MINI_MAP_SIZE / 2 - (data->player.x * MINI_MAP_SCALE_FACTOR);
-    int offset_y = MINI_MAP_SIZE / 2 - (data->player.y * MINI_MAP_SCALE_FACTOR);
+    int offset_x = (int)(MINI_MAP_SIZE / 2 - (floorf(data->player.x) * MINI_MAP_SCALE_FACTOR));
+    int offset_y = (int)(MINI_MAP_SIZE / 2 - (floorf(data->player.y)* MINI_MAP_SCALE_FACTOR));
     while (i < WIN_WIDTH)
     {
+        angle = data->player.rot_angle + (atanf((i - WIN_WIDTH / 2.0) / data->plane_distance));
         cast_ray(data, &ray, angle);
-        ray.plane_distance = (WIN_WIDTH / 2.0) / tanf(FOV / 2.0);
-        ray.wall_height = (CUB_SIZE / (ray.distance * cosf(angle - data->player.rot_angle)))\
-                        * ray.plane_distance;
-        ray.top_px = (WIN_HEIGHT - ray.wall_height) / 2.0;
-        ray.botm_px = ray.top_px + ray.wall_height;
-        int mini_x = (ray.wall_hit.x * MINI_MAP_SCALE_FACTOR) + offset_x;
-        int mini_y = (ray.wall_hit.y * MINI_MAP_SCALE_FACTOR) + offset_y;
+        int mini_x = ray.wall_hit.x * MINI_MAP_SCALE_FACTOR + offset_x;
+        int mini_y = ray.wall_hit.y * MINI_MAP_SCALE_FACTOR + offset_y;
         draw_ray(data, &ray, i);
         draw_line(data, MINI_MAP_SIZE / 2, MINI_MAP_SIZE / 2, mini_x, mini_y, 0x000FF);
-        angle += (FOV / WIN_WIDTH);
+        // angle += (FOV / WIN_WIDTH);
         i++;
     }
 }
@@ -61,7 +46,6 @@ bool    wall_collision_check(char **map, float x, float y, float buffer)
 
     return (false);
 }
-
 int update(t_game *data)
 {
     float   move_step;
@@ -72,17 +56,22 @@ int update(t_game *data)
     int     dx;
 
 
+    // mlx_clear_window(data->mlx, data->win);
+    for (int i = 0; i < MINI_MAP_SIZE;i++)
+    {
+        for (int j = 0; j < MINI_MAP_SIZE;j++)
+        {
+            ft_mlx_pixel_put(&data->render_buf, j, i, 0x000000);
+        }
+    }
     mlx_mouse_get_pos(data->mlx, data->win, &x, &y);
     dx = (x - WIN_WIDTH / 2);
-
     if (dx != 0)
     {
         data->player.rot_angle += ROT_SPEED * dx / 10.0; // Adjust the divisor for sensitivity
         mlx_mouse_move(data->mlx, data->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
     }
     data->last_mouse_x = WIN_WIDTH / 2;
-    // mlx_clear_window(data->mlx, data->win);
-    draw_mini_map(data);
     move_step = data->player.walk_dir * WALK_SPEED;
     next_map_player_x = data->player.x + (cosf(data->player.rot_angle) * move_step);
     next_map_player_y = data->player.y + (sinf(data->player.rot_angle) * move_step);
@@ -100,6 +89,7 @@ int update(t_game *data)
             data->player.y = next_map_player_y;
     }
     rays_cast(data);
+    draw_mini_map(data);
     draw_player(data);
     mlx_put_image_to_window(data->mlx, data->win, data->render_buf.img, 0, 0);
     return (0);

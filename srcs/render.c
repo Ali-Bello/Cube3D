@@ -57,7 +57,7 @@ void    draw_mini_sprite(t_game *game, t_point offset)
     game->sprite.angle = game->player.rot_angle - atan2f(300 - game->player.y, 192 - game->player.x);
     game->sprite.angle = normalize_angle(game->sprite.angle);
     game->sprite.angle = fabsf(game->sprite.angle);
-    if (game->sprite.angle < FOV / 2 + 0.14 || game->sprite.angle > (2 * M_PI - FOV / 2) - 0.1)
+    if (game->sprite.angle < FOV / 2 + 0.13 || game->sprite.angle > (2 * M_PI - FOV / 2) - 0.1)
     {
         game->sprite.is_visible = true;
         draw_square(game, 192 * MINI_MAP_SCALE_FACTOR + offset.x, 300 * MINI_MAP_SCALE_FACTOR + offset.y, 5, 0x00AAFF);
@@ -131,7 +131,7 @@ float   set_texture_cordinates(t_ray *ray, t_img *texture, t_point *cords)
 {
     float step;
 
-    if (ray->wall_hit_face) 
+    if (ray->wall_hit_face)
         cords->x = (fmodf(ray->wall_hit.x, CUB_SIZE) / CUB_SIZE) * texture->width;
     else
         cords->x = (fmodf(ray->wall_hit.y, CUB_SIZE) / CUB_SIZE) * texture->width;
@@ -190,5 +190,6 @@ void draw_ray(t_game *game, t_ray *ray, int w_idx)
         i++;
     }
     draw_bounds_line(game, ray->botm_px, WIN_HEIGHT, w_idx, 0x42AA6B);
+
 }
 

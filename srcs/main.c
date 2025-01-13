@@ -51,7 +51,7 @@ void draw_sprite(t_game *game)
     // printf("left_px = [%d], right_px = [%f]\n", start_x, right_x);
     static int offset;
     static int z;
-    if (offset >= 640)
+    if (offset >= 768)
         offset = 0;
     if (game->sprite.is_visible)
     {
@@ -59,7 +59,6 @@ void draw_sprite(t_game *game)
         height = 120;
         step = (float)height / sprite_height;
         tex_cord.y = 0;
-
         for (int i = top_y; i < botm_y; i++)
         {
             int dy = i + (sprite_height / 2) - (WIN_HEIGHT / 2);
@@ -81,10 +80,94 @@ void draw_sprite(t_game *game)
             }
         }
     }
-    if (z % 50 == 0)
+    if (z % 30 == 0)
         offset += 128;
     z++;
 }
+
+void draw_textured_floor(t_game *game, t_ray *ray, int w_idx, float ray_angle)
+{
+    int y;
+    t_point tex_cord;
+    t_img *floor_texture = &game->textures[0]; // Replace with the floor texture ID
+    float ray_cos = cosf(ray_angle);
+    float ray_sin = sinf(ray_angle);
+    float corrected_cos = cosf(ray_angle - game->player.rot_angle);
+
+    for (y = ray->botm_px; y < WIN_HEIGHT; y++) {
+        // Distance to the floor
+        float distance = (WIN_HEIGHT / (2.0f * y - WIN_HEIGHT));
+
+        distance = distance / corrected_cos;
+        // World position of the floor
+        float floor_x = game->player.x / CUB_SIZE + distance * ray_cos;
+        float floor_y = game->player.y / CUB_SIZE + distance * ray_sin;
+
+        // Texture coordinates
+        tex_cord.x = (int)(floor_x * floor_texture->width) % floor_texture->width;
+        tex_cord.y = (int)(floor_y * floor_texture->height) % floor_texture->height;
+
+        // Get the texture color
+        int color = get_texture_pixel(floor_texture, tex_cord.x, tex_cord.y);
+
+        // Optional: Apply shading based on distance
+        // color = shade_color(color, distance, 0);
+
+        // Draw the pixel
+        ft_mlx_pixel_put(&game->render_buf, w_idx, y, color);
+    }
+}
+void draw_floor_and_ceiling(t_game *game, int w_idx, int start_y, float angle)
+{
+    t_img *floor_texture = &game->textures[0];  // Use your floor texture
+    t_img *ceiling_texture = &game->textures[0];  // Use your ceiling texture
+    int y;
+    t_point floor_tex_cord;
+    t_point ceiling_tex_cord;
+
+    // Calculate the angle of the current ray
+    float ray_angle = angle;
+
+    // Iterate through each pixel from the bottom of the walls
+    for (y = start_y; y < WIN_HEIGHT; y++)
+    {
+        // Calculate the distance to the floor and ceiling at this row
+        float floor_distance = (y - WIN_HEIGHT / 2.0f) / (y - WIN_HEIGHT / 2.0f);  // Adjust based on your projection logic
+        float ceiling_distance = (y - WIN_HEIGHT / 2.0f) / (WIN_HEIGHT / 2.0f);  // Inverse for ceiling
+
+        // Calculate the world coordinates for the floor texture (projected in the direction of the ray)
+        float floor_x = game->player.x+ floor_distance * cosf(ray_angle);
+        float floor_y = game->player.y+ floor_distance * sinf(ray_angle);
+
+        // Calculate the world coordinates for the ceiling texture (projected opposite of the ray)
+        float ceiling_x = game->player.x / - ceiling_distance * cosf(ray_angle);
+        float ceiling_y = game->player.y - ceiling_distance * sinf(ray_angle);
+
+        // Map the world coordinates to texture coordinates for floor
+        floor_tex_cord.x = (int)(floor_x * floor_texture->width) % floor_texture->width;
+        floor_tex_cord.y = (int)(floor_y * floor_texture->height) % floor_texture->height;
+
+        // Map the world coordinates to texture coordinates for ceiling
+        ceiling_tex_cord.x = (int)(ceiling_x * ceiling_texture->width) % ceiling_texture->width;
+        ceiling_tex_cord.y = (int)(ceiling_y * ceiling_texture->height) % ceiling_texture->height;
+
+        // Fetch the floor texture color
+        int floor_color = get_texture_pixel(floor_texture, floor_tex_cord.x, floor_tex_cord.y);
+        // Fetch the ceiling texture color
+        int ceiling_color = get_texture_pixel(ceiling_texture, ceiling_tex_cord.x, ceiling_tex_cord.y);
+
+        // Optionally shade the floor and ceiling based on distance
+        // floor_color = shade_color(floor_color, floor_distance, false);
+        // ceiling_color = shade_color(ceiling_color, ceiling_distance, false);
+
+        // Draw the floor pixel
+        ft_mlx_pixel_put(&game->render_buf, w_idx, y, floor_color);
+
+        // Draw the ceiling pixel
+        ft_mlx_pixel_put(&game->render_buf, w_idx, WIN_HEIGHT - y, ceiling_color);
+    }
+}
+
 
 void    rays_cast(t_game *game)
 {
@@ -98,6 +181,9 @@ void    rays_cast(t_game *game)
     {
         angle = game->player.rot_angle + (atan2f((i - WIN_WIDTH / 2.0) , game->plane_distance));
         cast_ray(game, &ray, angle);
+        // draw_textured_ceiling(game, i, angle);
+        // draw_textured_floor(game, &ray, i, angle);
+        // draw_floor_and_ceiling(game, i, ray.botm_px, angle);
         draw_ray(game, &ray, i);
         draw_mini_ray(game, &ray);
         i++;

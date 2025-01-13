@@ -83,6 +83,10 @@ void    init_game(t_game *data)
                         &data->textures[4].width, &data->textures[4].height);
     data->textures[4].addr = mlx_get_data_addr(data->textures[4].img, &data->textures[4].bpp,\
                         &data->textures[4].line_len, &data->textures[4].endian);
+    data->sprite.img.img = mlx_xpm_file_to_image(data->mlx, "warrior_sprite.xpm",\
+                        &data->sprite.img.width, &data->sprite.img.height);
+    data->sprite.img.addr = mlx_get_data_addr(data->sprite.img.img, &data->sprite.img.bpp,\
+                        &data->sprite.img.line_len, &data->sprite.img.endian);
     data->last_mouse_x = -1;
     data->plane_distance = (WIN_WIDTH / 2) / tanf(FOV / 2);
 }

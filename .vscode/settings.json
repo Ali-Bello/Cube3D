@@ -8,6 +8,7 @@
         "stdbool.h": "c",
         "limits.h": "c",
         "stdlib.h": "c",
-        "mlx.h": "c"
+        "mlx.h": "c",
+        "time.h": "c"
     }
 }

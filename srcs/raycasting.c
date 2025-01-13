@@ -125,6 +125,7 @@ void    perform_dda(t_game *game, t_ray *ray)
 void    cast_ray(t_game *game, t_ray *ray, float angle)
 {
     memset(ray, 0, sizeof(t_ray));
+
     angle = normalize_angle(angle);
     ray->angle_tan = tanf(angle);
     ray->facing_down = angle > 0 && angle < M_PI;

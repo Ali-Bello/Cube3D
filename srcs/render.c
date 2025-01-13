@@ -34,6 +34,41 @@ int get_texture_pixel(t_img *texture, int x, int y)
 	return (pixel_color);
 }
 
+void    cpy_sprite_frame(t_game *game, int x_offset, int y_offset, int size)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while (i < size)
+    {
+        j = 0;
+        while (j < size)
+        {
+            ft_mlx_pixel_put(&game->render_buf, 200 + j, i,\
+                get_texture_pixel(&game->sprite.img, x_offset + j, y_offset + i));
+            j++;
+        }
+        i++;
+    }
+}
+void    draw_mini_sprite(t_game *game, t_point offset)
+{
+    game->sprite.angle = game->player.rot_angle - atan2f(300 - game->player.y, 192 - game->player.x);
+    game->sprite.angle = normalize_angle(game->sprite.angle);
+    game->sprite.angle = fabsf(game->sprite.angle);
+    if (game->sprite.angle < FOV / 2 + 0.14 || game->sprite.angle > (2 * M_PI - FOV / 2) - 0.1)
+    {
+        game->sprite.is_visible = true;
+        draw_square(game, 192 * MINI_MAP_SCALE_FACTOR + offset.x, 300 * MINI_MAP_SCALE_FACTOR + offset.y, 5, 0x00AAFF);
+    }
+    else
+    {
+        draw_square(game, 192 * MINI_MAP_SCALE_FACTOR + offset.x, 300 * MINI_MAP_SCALE_FACTOR + offset.y, 5, 0x807e7a);
+        game->sprite.is_visible = false;
+    }
+}
+
 void    draw_mini_map(t_game *game)
 {
     t_point offset;
@@ -56,6 +91,7 @@ void    draw_mini_map(t_game *game)
                 scaled_size, 0xAAAAAAA);
         }
     }
+    draw_mini_sprite(game, offset);
 }
 
 int get_texture_id(t_game *game, t_ray *ray)
@@ -142,7 +178,6 @@ void draw_ray(t_game *game, t_ray *ray, int w_idx)
     draw_bounds_line(game, 0, ray->top_px, w_idx, 0x4242AA);
     step = set_texture_cordinates(ray, texture, &tex_cord);
     i = ray->top_px;
-
     while (i < ray->botm_px)
     {
         if (i >= MINI_MAP_SIZE || w_idx >= MINI_MAP_SIZE)

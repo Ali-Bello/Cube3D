@@ -34,7 +34,7 @@
 # define RIGHT 65363
 # define ESC 65307
 # define CUB_SIZE 32
-# define FOV 90 * (M_PI / 180)
+# define FOV 70 * (M_PI / 180)
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 # define WALK_SPEED 0.5
@@ -54,6 +54,7 @@
 # define ITALIC "\x1b[3m"
 # define UNDERLINE "\x1b[4m"
 
+
 typedef struct s_img
 {
 	void		*img;
@@ -65,15 +66,24 @@ typedef struct s_img
 	int			endian;
 }				t_img;
 
+typedef struct s_sprite
+{
+	t_img	img;
+	float	angle;
+	int		x;
+	int		y;
+	int		offset_x;
+	int		offset_y;
+	bool	is_visible;
+} t_sprite;
+
 typedef struct s_player
 {
 	float		x;
 	float		y;
 	float		rot_angle;
-	char walk_dir; // 1 walk forward, -1 walk backward
-	char turn_dir; // 1 turn right, -1 turn left
-	int			mouse_x;
-	int			mouse_y;
+	char		walk_dir; // 1 walk forward, -1 walk backward
+	char		turn_dir; // 1 turn right, -1 turn left
 }				t_player;
 
 typedef struct s_point
@@ -111,6 +121,7 @@ typedef struct s_game
 	t_player	player;
 	t_img		render_buf;
 	t_img		textures[5];
+	t_sprite	sprite;
 	int			last_mouse_x;
     float       plane_distance;
 }				t_game;
@@ -156,6 +167,8 @@ void			draw_player(t_game *game);
 void			draw_ray(t_game *game, t_ray *ray, int w_idx);
 void			draw_rectangle(t_game *game, int x, int y, int width,
 					int height, int color);
+void			cpy_sprite_frame(t_game *game, int x_offset, int y_offset, int size);
+int				get_texture_pixel(t_img *texture, int x, int y);
 //////////////////////////////////////
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:40:34 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/21 14:53:15 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/16 06:17:38 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void    cast_ray(t_game *game, t_ray *ray, float angle)
     ray->horiz_wall_hit = check_intersection(game, ray, 1);
 
     perform_dda(game, ray);
-    ray->wall_height = (CUB_SIZE / (ray->distance * cosf(angle - game->player.rot_angle))) * game->plane_distance;
+    ray->wall_height = (CUB_SIZE / (ray->distance * cosf(angle - game->player.angle.rad))) * game->perp_distance;
     ray->top_px = (WIN_HEIGHT - ray->wall_height) / 2.0;
     ray->botm_px = ray->top_px + ray->wall_height;
 }

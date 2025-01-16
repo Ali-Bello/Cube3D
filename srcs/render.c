@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:38:39 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/21 14:33:01 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/16 06:17:30 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,66 +32,6 @@ int get_texture_pixel(t_img *texture, int x, int y)
     pixel = texture->addr + (y * texture->line_len + x * (texture->bpp / 8));
     pixel_color = *(int *)pixel;
 	return (pixel_color);
-}
-
-void    cpy_sprite_frame(t_game *game, int x_offset, int y_offset, int size)
-{
-    int i;
-    int j;
-
-    i = 0;
-    while (i < size)
-    {
-        j = 0;
-        while (j < size)
-        {
-            ft_mlx_pixel_put(&game->render_buf, 200 + j, i,\
-                get_texture_pixel(&game->sprite.img, x_offset + j, y_offset + i));
-            j++;
-        }
-        i++;
-    }
-}
-void    draw_mini_sprite(t_game *game, t_point offset)
-{
-    game->sprite.angle = game->player.rot_angle - atan2f(300 - game->player.y, 192 - game->player.x);
-    game->sprite.angle = normalize_angle(game->sprite.angle);
-    game->sprite.angle = fabsf(game->sprite.angle);
-    if (game->sprite.angle < FOV / 2 + 0.13 || game->sprite.angle > (2 * M_PI - FOV / 2) - 0.1)
-    {
-        game->sprite.is_visible = true;
-        draw_square(game, 192 * MINI_MAP_SCALE_FACTOR + offset.x, 300 * MINI_MAP_SCALE_FACTOR + offset.y, 5, 0x00AAFF);
-    }
-    else
-    {
-        draw_square(game, 192 * MINI_MAP_SCALE_FACTOR + offset.x, 300 * MINI_MAP_SCALE_FACTOR + offset.y, 5, 0x807e7a);
-        game->sprite.is_visible = false;
-    }
-}
-
-void    draw_mini_map(t_game *game)
-{
-    t_point offset;
-    int scaled_size;
-    int i;
-    int j;
-
-    offset.x = MINI_MAP_SIZE / 2 - (game->player.x * MINI_MAP_SCALE_FACTOR);
-    offset.y = MINI_MAP_SIZE / 2 - (game->player.y * MINI_MAP_SCALE_FACTOR);
-    scaled_size = CUB_SIZE * MINI_MAP_SCALE_FACTOR + 1;
-    i = -1;
-    while (game->map[++i])
-    {
-        j = -1;
-        while (game->map[i][++j])
-        {
-            if (game->map[i][j] == '1')
-                draw_square(game, (j * CUB_SIZE * MINI_MAP_SCALE_FACTOR) + offset.x,
-                (i * CUB_SIZE * MINI_MAP_SCALE_FACTOR) + offset.y,
-                scaled_size, 0xAAAAAAA);
-        }
-    }
-    draw_mini_sprite(game, offset);
 }
 
 int get_texture_id(t_game *game, t_ray *ray)
@@ -166,30 +106,31 @@ int shade_color(int color, float distance, bool is_vertical)
     return ((r << 16) | (g << 8) | b);
 }
 
-void draw_ray(t_game *game, t_ray *ray, int w_idx)
+void    draw_ray(t_game *game, t_ray *ray, int w_idx)
 {
     t_point tex_cord;
     t_img   *texture;
     int     i;
     float   step;
-    int     color;
+    float   sky_offset;
 
-    texture = &game->textures[get_texture_id(game, ray)];
-    draw_bounds_line(game, 0, ray->top_px, w_idx, 0x4242AA);
-    step = set_texture_cordinates(ray, texture, &tex_cord);
-    i = ray->top_px;
-    while (i < ray->botm_px)
+    i = -1;
+    sky_offset = (game->player.angle.rad / (2 * M_PI)) * game->textures[5].width;
+    while (++i < ray->top_px)
     {
-        if (i >= MINI_MAP_SIZE || w_idx >= MINI_MAP_SIZE)
-        {
-            color = get_texture_pixel(texture, tex_cord.x, tex_cord.y);
-            color = shade_color(color, ray->distance, ray->wall_hit_face);
-            ft_mlx_pixel_put(&game->render_buf, w_idx, i, color);
-        }
-        tex_cord.y += step;
-        i++;
+        ft_mlx_pixel_put(&game->render_buf, w_idx, i,\
+            get_texture_pixel(&game->textures[5], (w_idx + (int)sky_offset)\
+            % game->textures[5].width, (i * game->textures[5].height) / (WIN_HEIGHT / 2)));
     }
-    draw_bounds_line(game, ray->botm_px, WIN_HEIGHT, w_idx, 0x42AA6B);
-
+    texture = &game->textures[get_texture_id(game, ray)];
+    (void)(step = set_texture_cordinates(ray, texture, &tex_cord), i = ray->top_px - 1);
+    while (++i < ray->botm_px)
+    {
+        ft_mlx_pixel_put(&game->render_buf, w_idx, i,\
+        shade_color(get_texture_pixel(texture, tex_cord.x, tex_cord.y),\
+        ray->distance, ray->wall_hit_face));
+        tex_cord.y += step;
+    }
+    draw_bounds_line(game, ray->botm_px, WIN_HEIGHT, w_idx, 0x8C6756);
 }
 

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 23:40:00 by marvin            #+#    #+#             */
-/*   Updated: 2024/12/21 14:54:43 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/16 06:20:34 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,17 @@
 # define W 119
 # define A 97
 # define S 115
+# define E 101
 # define LEFT 65361
 # define RIGHT 65363
+# define SPACE 32
 # define ESC 65307
 # define CUB_SIZE 32
 # define FOV 70 * (M_PI / 180)
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
-# define WALK_SPEED 0.5
-# define ROT_SPEED WALK_SPEED *(M_PI / 180)
+# define WALK_SPEED 1.0
+# define ROT_SPEED WALK_SPEED * (M_PI / 180)
 # define MINI_MAP_SIZE 150
 # define MINI_MAP_SCALE_FACTOR 0.6
 # define this (WIN_WIDTH / 2) - tanf(FOV / 2)
@@ -54,6 +56,22 @@
 # define ITALIC "\x1b[3m"
 # define UNDERLINE "\x1b[4m"
 
+typedef struct s_point
+{
+	float		x;
+	float		y;
+	bool		is_hit;
+}				t_point;
+
+typedef struct s_cast
+{
+	float		distance;
+	float		height;
+	float		top_y;
+	float		botm_y;
+	float		left_x;
+	float		right_x;
+} t_cast;
 
 typedef struct s_img
 {
@@ -74,24 +92,31 @@ typedef struct s_sprite
 	int		y;
 	int		offset_x;
 	int		offset_y;
+	int		frame_width;
+	int		frame_height;
 	bool	is_visible;
+	t_cast	casted;
 } t_sprite;
+
+typedef struct s_angle
+{
+	float		deg;
+	float		rad;
+	float		cos;
+	float		sin;
+	float		tan;
+}				t_angle;
 
 typedef struct s_player
 {
 	float		x;
 	float		y;
-	float		rot_angle;
+	t_angle		angle;
 	char		walk_dir; // 1 walk forward, -1 walk backward
 	char		turn_dir; // 1 turn right, -1 turn left
+	char		strafe_dir; // 1 strafe right, -1 strafe left
 }				t_player;
 
-typedef struct s_point
-{
-	float		x;
-	float		y;
-	bool		is_hit;
-}				t_point;
 
 typedef struct s_ray
 {
@@ -118,13 +143,30 @@ typedef struct s_game
 	int			map_width;
 	int			map_height;
 	char		**map;
+	float		distances[WIN_WIDTH];
 	t_player	player;
 	t_img		render_buf;
-	t_img		textures[5];
-	t_sprite	sprite;
+	t_img		textures[6];
+	t_sprite	portal;
+	t_sprite	*collectibles;
+	int			collectibles_count;
+	bool		spawn_portal;
+	bool		door_open;
 	int			last_mouse_x;
-    float       plane_distance;
+    float       perp_distance;
 }				t_game;
+
+void    update_portal(t_game *game);
+void	draw_sprite(t_game *game);
+bool    wall_collision_check(t_game *game, float x, float y);
+bool    check_surrondings(char **map, float x, float y, char c);
+
+//////////// MINI_MAP /////////////
+
+void    draw_mini_ray(t_game *game, t_ray *ray);
+void	draw_mini_sprite(t_game *game, t_point offset);
+void    clear_mini_map_area(t_img *render_img);
+///////////////////////////////////////
 
 //////////// INITIALIZING /////////////
 
@@ -169,6 +211,7 @@ void			draw_rectangle(t_game *game, int x, int y, int width,
 					int height, int color);
 void			cpy_sprite_frame(t_game *game, int x_offset, int y_offset, int size);
 int				get_texture_pixel(t_img *texture, int x, int y);
+int shade_color(int color, float distance, bool is_vertical);
 //////////////////////////////////////
 
 #endif

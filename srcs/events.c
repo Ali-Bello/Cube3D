@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:39:41 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/16 06:26:42 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/16 09:35:33 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int key_press(int key, t_game *game)
         game->player.turn_dir = -1;
     else if (key == RIGHT)
         game->player.turn_dir = 1;
-    else if (key == SPACE)
+    else if (key == SPACE && game->collectibles_collected == game->collectibles_count)
         game->spawn_portal= true;
     else if (key == E)
     {

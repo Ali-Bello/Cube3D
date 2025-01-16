@@ -60,8 +60,6 @@ void    update_mouse_interaction(t_game *game)
     game->last_mouse_x = WIN_WIDTH / 2;
 }
 
-
-
 void    update_player_position(t_game *game)
 {
     float   move_step;
@@ -71,12 +69,10 @@ void    update_player_position(t_game *game)
 
     move_step = game->player.walk_dir * WALK_SPEED;
     strafe_step = game->player.strafe_dir * WALK_SPEED;
-    next_map_player_x = game->player.x + (game->player.angle.cos * move_step) + (cosf(game->player.angle.rad + M_PI_2) * strafe_step);
-    next_map_player_y = game->player.y + (game->player.angle.sin * move_step) + (sinf(game->player.angle.rad + M_PI_2) * strafe_step);
-    
-    // next_map_player_x = game->player.x + (game->player.angle.cos * move_step);
-    // next_map_player_y = game->player.y + (game->player.angle.sin * move_step);
-    
+    next_map_player_x = game->player.x + (game->player.angle.cos * move_step)\
+         + (cosf(game->player.angle.rad + M_PI_2) * strafe_step);
+    next_map_player_y = game->player.y + (game->player.angle.sin * move_step)\
+         + (sinf(game->player.angle.rad + M_PI_2) * strafe_step);
     game->player.angle.rad += (game->player.turn_dir * ROT_SPEED);
     if (!wall_collision_check(game, next_map_player_x, next_map_player_y))
     {
@@ -92,6 +88,61 @@ void    update_player_position(t_game *game)
     }
 }
 
+int compare_collectibles(const void *a, const void *b)
+{
+    t_sprite *sprite_a = (t_sprite *)a;
+    t_sprite *sprite_b = (t_sprite *)b;
+
+    if (sprite_a->casted.distance < sprite_b->casted.distance)
+        return 1;
+    else if (sprite_a->casted.distance > sprite_b->casted.distance)
+        return -1;
+    else
+        return 0;
+}
+
+void    set_sprites_distances(t_game *game)
+{
+    int i;
+
+    i = -1;
+    while (++i < game->collectibles_count)
+    {
+        game->collectibles[i].casted.distance = distance_from_origin(&game->player, game->collectibles[i].x, game->collectibles[i].y) *
+                        cosf(atan2f(game->collectibles[i].y - game->player.y, game->collectibles[i].x - game->player.x) - game->player.angle.rad);
+    }
+    qsort(game->collectibles, game->collectibles_count, sizeof(t_sprite), compare_collectibles);
+}
+
+void    update_collectibles(t_game *game)
+{
+    int i;
+
+    i = 0;
+    set_sprites_distances(game);
+    while (i < game->collectibles_count)
+    {
+        if (game->collectibles[i].is_visible && game->collectibles[i].casted.distance < 7.0)
+        {
+            game->collectibles_collected++;
+            game->collectibles[i].is_visible = false;
+            game->collectibles[i].x = -1;
+            game->collectibles[i].y = -1;
+        }
+        else if (game->collectibles[i].is_visible)
+        {
+            if (game->collectibles[i].offset_x >= game->collectibles[i].img.width)
+                game->collectibles[i].offset_x = 0;
+            set_sprite_dimensions(game, &game->collectibles[i]);
+            draw_sprite(game, &game->collectibles[i]);
+            if (game->collectibles[i].delta % 20  == 0)
+                game->collectibles[i].offset_x += game->collectibles[i].frame_width;
+            game->collectibles[i].delta++;
+        }
+        i++;
+    }
+}
+
 int update(t_game *game)
 {
     game->player.angle.rad = normalize_angle(game->player.angle.rad);
@@ -103,6 +154,8 @@ int update(t_game *game)
     update_player_position(game);
     rays_cast(game);
     draw_mini_map(game);
+    if (game->collectibles_collected != game->collectibles_count)
+        update_collectibles(game);
     if (game->spawn_portal)
         update_portal(game);
     mlx_put_image_to_window(game->mlx, game->win, game->render_buf.img, 0, 0);

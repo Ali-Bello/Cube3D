@@ -6,12 +6,23 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:48:42 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/16 06:19:18 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/16 10:01:03 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
+void    generate_valid_coordinates(t_game *game, int *x, int *y)
+{
+    *x = (rand() % game->map_width) * CUB_SIZE;
+    *y = (rand() % game->map_height) * CUB_SIZE;
+    while (*y / CUB_SIZE >= game->map_height ||
+        *x / CUB_SIZE >= game->map_width || wall_collision_check(game, *x, *y))
+    {
+        *x = (rand() % game->map_width) * CUB_SIZE;
+        *y = (rand() % game->map_height) * CUB_SIZE;
+    }
+}
 void    teleport_player(t_game *game)
 {
     int new_x;
@@ -20,15 +31,8 @@ void    teleport_player(t_game *game)
     if (game->portal.casted.distance <= 10.0 && game->portal.is_visible)
     {
         game->spawn_portal = false;
-        new_x = (rand() % game->map_width) * CUB_SIZE;
-        new_y = (rand() % game->map_height) * CUB_SIZE;
-        while (new_y / CUB_SIZE >= game->map_height ||
-        new_x / CUB_SIZE >= game->map_width ||
-        wall_collision_check(game, new_x, new_y))
-        {
-            new_x = rand() % game->map_width * CUB_SIZE;
-            new_y = rand() % game->map_height * CUB_SIZE;
-        }
+        generate_valid_coordinates(game, &new_x, &new_y);
+        game->portal_effect = !game->portal_effect;
         game->player.x = new_x;
         game->player.y = new_y;
         game->portal.x = 0;
@@ -53,7 +57,7 @@ void    set_sprite_dimensions(t_game *game, t_sprite  *sprite)
         sprite->casted.right_x = WIN_WIDTH;
 }
 
-void    draw_portal(t_game *game)
+void    draw_sprite(t_game *game, t_sprite *sprite)
 {
     int i;
     int j;
@@ -61,21 +65,21 @@ void    draw_portal(t_game *game)
     int color;
     t_point tex_px;
 
-    step = game->portal.frame_height / game->portal.casted.height;
+    step = sprite->frame_height / sprite->casted.height;
     tex_px.y = 0;
-    i = game->portal.casted.top_y - 1;
-    while (++i < game->portal.casted.botm_y)
+    i = sprite->casted.top_y - 1;
+    while (++i < sprite->casted.botm_y)
     {
-        tex_px.y = (i + (game->portal.casted.height / 2) - (WIN_HEIGHT / 2)) * step;
-        j = (game->portal.casted.left_x - 1);
+        tex_px.y = (i + (sprite->casted.height / 2) - (WIN_HEIGHT / 2)) * step;
+        j = (sprite->casted.left_x - 1);
         if (j < 0)
             j = -1;
-        while (++j < game->portal.casted.right_x)
+        while (++j < sprite->casted.right_x)
         {
-            tex_px.x = (j - game->portal.casted.left_x) * (game->portal.frame_width / game->portal.casted.height);
-            color = get_texture_pixel(&game->portal.img, tex_px.x + game->portal.offset_x, tex_px.y);
+            tex_px.x = (j - sprite->casted.left_x) * (sprite->frame_width / sprite->casted.height);
+            color = get_texture_pixel(&sprite->img, tex_px.x + sprite->offset_x, tex_px.y);
             if (color >= 0 && (j >= MINI_MAP_SIZE || i >= MINI_MAP_SIZE)
-                && game->portal.casted.distance < game->distances[j])
+                && sprite->casted.distance < game->distances[j])
                     ft_mlx_pixel_put(&game->render_buf, j, i, color);
         }
     }
@@ -100,8 +104,8 @@ void    update_portal(t_game *game)
         if (game->portal.offset_x >= game->portal.img.width)
             game->portal.offset_x = 0;
         set_sprite_dimensions(game, &game->portal);
-        draw_portal(game);
-        if (delta % 30 == 0)
+        draw_sprite(game, &game->portal);
+        if (delta % 20 == 0)
             game->portal.offset_x += game->portal.frame_width;
         delta++;
     }

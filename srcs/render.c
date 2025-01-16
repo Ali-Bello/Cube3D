@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:38:39 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/16 06:17:30 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/16 09:58:03 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,16 @@ void    draw_ray(t_game *game, t_ray *ray, int w_idx)
         ray->distance, ray->wall_hit_face));
         tex_cord.y += step;
     }
-    draw_bounds_line(game, ray->botm_px, WIN_HEIGHT, w_idx, 0x8C6756);
+    if (game->portal_effect)
+    {
+        i = ray->botm_px - 1;
+        while (++i < WIN_HEIGHT)
+        {
+            ft_mlx_pixel_put(&game->render_buf, w_idx, i,\
+            shade_color(0x8C6756, ray->distance, ray->wall_hit_face));
+        }
+    }
+    else
+        draw_bounds_line(game, ray->botm_px, WIN_HEIGHT, w_idx, 0x8C6756);
 }
 

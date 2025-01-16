@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 23:40:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/16 06:20:34 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/16 09:47:25 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,9 @@ typedef struct s_sprite
 	int		x;
 	int		y;
 	int		offset_x;
-	int		offset_y;
 	int		frame_width;
 	int		frame_height;
+	int		delta;
 	bool	is_visible;
 	t_cast	casted;
 } t_sprite;
@@ -150,21 +150,24 @@ typedef struct s_game
 	t_sprite	portal;
 	t_sprite	*collectibles;
 	int			collectibles_count;
+	int			collectibles_collected;
 	bool		spawn_portal;
+	bool		portal_effect;
 	bool		door_open;
 	int			last_mouse_x;
     float       perp_distance;
 }				t_game;
 
 void    update_portal(t_game *game);
-void	draw_sprite(t_game *game);
 bool    wall_collision_check(t_game *game, float x, float y);
 bool    check_surrondings(char **map, float x, float y, char c);
+void    generate_valid_coordinates(t_game *game, int *x, int *y);
+void    draw_sprite(t_game *game, t_sprite *sprite);
+void    set_sprite_dimensions(t_game *game, t_sprite  *sprite);
 
 //////////// MINI_MAP /////////////
 
 void    draw_mini_ray(t_game *game, t_ray *ray);
-void	draw_mini_sprite(t_game *game, t_point offset);
 void    clear_mini_map_area(t_img *render_img);
 ///////////////////////////////////////
 

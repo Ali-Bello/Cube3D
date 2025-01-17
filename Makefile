@@ -13,7 +13,7 @@ CFLAGS = -Wall -Werror -Wextra -g3 -o3
 
 MLX_FLAGS = -lXext -lX11 -lm
 
-SRCS = debugging.c raycasting.c events.c render.c init.c portal.c mini_map.c main.c
+SRCS = debugging.c raycasting.c events.c render.c init.c portal.c mini_map.c collectibles.c main.c
 
 OBJS_DIR = objs
 

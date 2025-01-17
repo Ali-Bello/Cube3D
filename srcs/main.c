@@ -10,11 +10,20 @@ void    rays_cast(t_game *game)
     angle = game->player.angle.rad - (FOV / 2.0);
     while (i < WIN_WIDTH)
     {
-        angle = game->player.angle.rad + (atan2f((i - WIN_WIDTH / 2.0) , game->perp_distance));
+        angle = game->player.angle.rad +\
+            (atan2f((i - WIN_WIDTH / 2.0) , game->perp_distance));
         cast_ray(game, &ray, angle);
         game->distances[i] = ray.distance;
         draw_ray(game, &ray, i);
         draw_mini_ray(game, &ray);
+        if (i > WIN_WIDTH / 2 - 10 && i < WIN_WIDTH / 2 + 10)
+        {
+            if (ray.distance > 5 && ray.distance < 49.0 && game->map[(int)(ray.wall_hit.y / CUB_SIZE)]\
+                [(int)(ray.wall_hit.x / CUB_SIZE)] == 'D')
+                game->door_inrange = true;
+            else if (ray.distance > 49.0 || ray.distance < 5)
+                game->door_inrange = false;
+        }
         i++;
     }
 }
@@ -50,11 +59,12 @@ void    update_mouse_interaction(t_game *game)
     int     y;
     int     dx;
 
+    mlx_mouse_hide(game->mlx, game->win);
     mlx_mouse_get_pos(game->mlx, game->win, &x, &y);
     dx = (x - WIN_WIDTH / 2);
     if (dx != 0)
     {
-        game->player.angle.rad += ROT_SPEED * dx / 10.0;
+        game->player.angle.rad += ROT_SPEED * dx / 45.0;
         mlx_mouse_move(game->mlx, game->win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
     }
     game->last_mouse_x = WIN_WIDTH / 2;
@@ -88,61 +98,6 @@ void    update_player_position(t_game *game)
     }
 }
 
-int compare_collectibles(const void *a, const void *b)
-{
-    t_sprite *sprite_a = (t_sprite *)a;
-    t_sprite *sprite_b = (t_sprite *)b;
-
-    if (sprite_a->casted.distance < sprite_b->casted.distance)
-        return 1;
-    else if (sprite_a->casted.distance > sprite_b->casted.distance)
-        return -1;
-    else
-        return 0;
-}
-
-void    set_sprites_distances(t_game *game)
-{
-    int i;
-
-    i = -1;
-    while (++i < game->collectibles_count)
-    {
-        game->collectibles[i].casted.distance = distance_from_origin(&game->player, game->collectibles[i].x, game->collectibles[i].y) *
-                        cosf(atan2f(game->collectibles[i].y - game->player.y, game->collectibles[i].x - game->player.x) - game->player.angle.rad);
-    }
-    qsort(game->collectibles, game->collectibles_count, sizeof(t_sprite), compare_collectibles);
-}
-
-void    update_collectibles(t_game *game)
-{
-    int i;
-
-    i = 0;
-    set_sprites_distances(game);
-    while (i < game->collectibles_count)
-    {
-        if (game->collectibles[i].is_visible && game->collectibles[i].casted.distance < 7.0)
-        {
-            game->collectibles_collected++;
-            game->collectibles[i].is_visible = false;
-            game->collectibles[i].x = -1;
-            game->collectibles[i].y = -1;
-        }
-        else if (game->collectibles[i].is_visible)
-        {
-            if (game->collectibles[i].offset_x >= game->collectibles[i].img.width)
-                game->collectibles[i].offset_x = 0;
-            set_sprite_dimensions(game, &game->collectibles[i]);
-            draw_sprite(game, &game->collectibles[i]);
-            if (game->collectibles[i].delta % 20  == 0)
-                game->collectibles[i].offset_x += game->collectibles[i].frame_width;
-            game->collectibles[i].delta++;
-        }
-        i++;
-    }
-}
-
 int update(t_game *game)
 {
     game->player.angle.rad = normalize_angle(game->player.angle.rad);
@@ -150,7 +105,10 @@ int update(t_game *game)
     game->player.angle.sin = sinf(game->player.angle.rad);
     game->player.angle.tan = tanf(game->player.angle.rad);
     clear_mini_map_area(&game->render_buf);
-    update_mouse_interaction(game);
+    if (!game->mouse_mode)
+        update_mouse_interaction(game);
+    else
+        mlx_mouse_show(game->mlx, game->win);
     update_player_position(game);
     rays_cast(game);
     draw_mini_map(game);
@@ -166,10 +124,9 @@ int main()
 {
     t_game  data;
 
-    srand(time(NULL)); 
+    srand(time(NULL));
     init_game(&data);
     check_allocations(&data);
-    mlx_mouse_hide(data.mlx, data.win);
     mlx_hook(data.win, 17, 0, exit_routine, &data);
     mlx_hook(data.win, 2, (1L<<0), key_press, &data);
     mlx_hook(data.win, 3, (1L<<1), key_release, &data);

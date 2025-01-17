@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 23:40:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/16 09:47:25 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/17 23:13:35 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,15 @@
 # define S 115
 # define E 101
 # define LEFT 65361
-# define RIGHT 65363
 # define SPACE 32
+# define RIGHT 65363
+# define CTRL 65507
 # define ESC 65307
 # define CUB_SIZE 32
 # define FOV 70 * (M_PI / 180)
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
-# define WALK_SPEED 1.0
+# define WALK_SPEED 1.5
 # define ROT_SPEED WALK_SPEED * (M_PI / 180)
 # define MINI_MAP_SIZE 150
 # define MINI_MAP_SCALE_FACTOR 0.6
@@ -154,17 +155,20 @@ typedef struct s_game
 	bool		spawn_portal;
 	bool		portal_effect;
 	bool		door_open;
+	bool		door_inrange;
+	bool		mouse_mode;
 	int			last_mouse_x;
     float       perp_distance;
 }				t_game;
 
+void    update_collectibles(t_game *game);
 void    update_portal(t_game *game);
 bool    wall_collision_check(t_game *game, float x, float y);
 bool    check_surrondings(char **map, float x, float y, char c);
 void    generate_valid_coordinates(t_game *game, int *x, int *y);
 void    draw_sprite(t_game *game, t_sprite *sprite);
 void    set_sprite_dimensions(t_game *game, t_sprite  *sprite);
-
+bool    check_door_surrondings(char **map, float x, float y, char c);
 //////////// MINI_MAP /////////////
 
 void    draw_mini_ray(t_game *game, t_ray *ray);

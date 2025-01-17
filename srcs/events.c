@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:39:41 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/16 09:35:33 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/17 23:37:09 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,8 @@ int exit_routine(t_game *game)
     exit(0);
 }
 
-bool    check_door_surrondings(char **map, float x, float y, char c)
-{
-    if (map[(int)((y - 11.0) / CUB_SIZE)][(int)((x) / CUB_SIZE)] == c ||
-        map[(int)((y + 11.0) / CUB_SIZE)][(int)((x) / CUB_SIZE)] == c ||
-        map[(int)((y) / CUB_SIZE)][(int)((x - 11.0) / CUB_SIZE)] == c ||
-        map[(int)((y) / CUB_SIZE)][(int)((x + 11.0) / CUB_SIZE)] == c)
-        return (true);
-    return (false);
-}
-
 int key_press(int key, t_game *game)
 {
-    bool    door_surrondings;
-
     if (key == ESC)
         exit_routine(game);
     if (key == W)
@@ -64,15 +52,10 @@ int key_press(int key, t_game *game)
         game->player.turn_dir = 1;
     else if (key == SPACE && game->collectibles_collected == game->collectibles_count)
         game->spawn_portal= true;
-    else if (key == E)
-    {
-        door_surrondings = check_door_surrondings(game->map, game->player.x, game->player.y, 'D');       
-        if (game->door_open && !door_surrondings)
-            game->door_open = false;
-        else if (!game->door_open && door_surrondings)
-            game->door_open = true;
-    }
-    // game->player.angle.rad += (game->player.turn_dir * ROT_SPEED);
+    else if (key == E && game->door_inrange)
+            game->door_open = !game->door_open;
+    else if (key == CTRL)
+        game->mouse_mode = !game->mouse_mode;
     return (0);
 }
 

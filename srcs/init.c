@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:25:13 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/16 09:36:06 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/16 11:28:16 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void    init_collectibles(t_game *game)
         generate_valid_coordinates(game, &game->collectibles[i].x, &game->collectibles[i].y);
         if (i > 0)
             game->collectibles[i].img = game->collectibles[0].img;
-        game->collectibles[i].frame_width = 16;
-        game->collectibles[i].frame_height = 16;
+        game->collectibles[i].frame_width = 64;
+        game->collectibles[i].frame_height = 64;
     }
 }
 void    init_game(t_game *data)

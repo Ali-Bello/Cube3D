@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:48:42 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/16 10:01:03 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/17 23:05:16 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,23 @@ void    generate_valid_coordinates(t_game *game, int *x, int *y)
         *y = (rand() % game->map_height) * CUB_SIZE;
     }
 }
+
+void    play_portal_song(void)
+{
+    pid_t pid = fork();
+
+    if (pid < 0)
+    {
+        perror("fork failed");
+        return;
+    }
+    else if (pid == 0)
+    {
+        system("cvlc --play-and-exit --quiet HA9_MCHA.mp3 > /dev/null 2>&1");
+        exit(EXIT_FAILURE);
+    }
+}
+
 void    teleport_player(t_game *game)
 {
     int new_x;
@@ -35,6 +52,7 @@ void    teleport_player(t_game *game)
         game->portal_effect = !game->portal_effect;
         game->player.x = new_x;
         game->player.y = new_y;
+        play_portal_song();
         game->portal.x = 0;
         game->portal.y = 0;
     }
@@ -80,7 +98,7 @@ void    draw_sprite(t_game *game, t_sprite *sprite)
             color = get_texture_pixel(&sprite->img, tex_px.x + sprite->offset_x, tex_px.y);
             if (color >= 0 && (j >= MINI_MAP_SIZE || i >= MINI_MAP_SIZE)
                 && sprite->casted.distance < game->distances[j])
-                    ft_mlx_pixel_put(&game->render_buf, j, i, color);
+                ft_mlx_pixel_put(&game->render_buf, j, i, color);
         }
     }
 }

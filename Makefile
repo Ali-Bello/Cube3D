@@ -11,7 +11,7 @@ NAME = cub3d
 
 BONUS_NAME = cub3d_bonus
 
-CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -g3#-fsanitize=address
 
 MLX_FLAGS = -lXext -lX11 -lm
 

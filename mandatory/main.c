@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 23:25:57 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/20 21:51:27 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/21 21:54:25 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	rays_cast(t_game *game)
 	t_ray	ray;
 
 	i = 0;
-	angle = game->player.angle.rad - (FOV / 2.0);
+	angle = game->player.angle.rad - ((FOV * M_PI / 180) / 2.0);
 	while (i < WIN_WIDTH)
 	{
 		angle = game->player.angle.rad + (atan2f((i - WIN_WIDTH / 2.0),
@@ -61,7 +61,8 @@ void	update_player_position(t_game *game)
 		+ (cosf(game->player.angle.rad + M_PI_2) * strafe_step);
 	next_map_player_y = game->player.y + (game->player.angle.sin * move_step)
 		+ (sinf(game->player.angle.rad + M_PI_2) * strafe_step);
-	game->player.angle.rad += (game->player.turn_dir * ROT_SPEED);
+	game->player.angle.rad += (game->player.turn_dir
+			* (ROT_SPEED * M_PI / 180));
 	if (!wall_collision_check(game, next_map_player_x, next_map_player_y))
 	{
 		game->player.x = next_map_player_x;
@@ -83,7 +84,6 @@ int	update(t_game *game)
 	game->player.angle.sin = sinf(game->player.angle.rad);
 	game->player.angle.tan = tanf(game->player.angle.rad);
 	update_player_position(game);
-	mlx_clear_window(game->mlx, game->win);
 	rays_cast(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->render_buf.img, 0, 0);
 	return (0);

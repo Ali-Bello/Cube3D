@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 02:55:33 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/21 07:17:41 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/21 21:54:53 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	draw_mini_sprite(t_bonus_game *game, t_sprite *sprite, t_point offset)
 			- atan2f(sprite->y - game->data.player.y, sprite->x
 				- game->data.player.x));
 	sprite->angle = fabsf(sprite->angle);
-	if (sprite->angle < FOV / 2 || sprite->angle > (2 * M_PI - FOV / 2))
+	if (sprite->angle < (FOV * M_PI / 180) / 2
+		|| sprite->angle > (2 * M_PI - (FOV * M_PI / 180) / 2))
 		sprite->is_visible = true;
 	else
 		sprite->is_visible = false;

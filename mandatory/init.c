@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:25:13 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/21 07:44:46 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/21 21:30:57 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,15 @@ void	load_image(t_game *data, t_img *img, char *path)
 			&img->height);
 	if (!img->img)
 	{
-		write(2, "ERROR: failed to load texture!\n", 31);
-		exit_routine(data);
+		if (write(2, "ERROR: failed to load texture!\n", 31))
+			exit_routine(data);
 	}
 	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
 			&img->endian);
 	if (!img->addr)
 	{
-		write(2, "ERROR: mlx failed to fetsh texture data!\n", 41);
-		exit_routine(data);
+		if (write(2, "ERROR: mlx failed to fetsh texture data!\n", 41))
+			exit_routine(data);
 	}
 }
 
@@ -87,7 +87,7 @@ void	init_game(t_game *data)
 	load_image(data, &data->textures[1], "./assets/textures/so_wall.xpm");
 	load_image(data, &data->textures[2], "./assets/textures/ea_wall.xpm");
 	load_image(data, &data->textures[3], "./assets/textures/we_wall.xpm");
-	data->perp_distance = (WIN_WIDTH / 2) / tanf(FOV / 2);
+	data->perp_distance = (WIN_WIDTH / 2) / tanf((FOV * M_PI / 180) / 2);
 }
 
 void	check_allocations(t_game *data)

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 01:58:11 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/21 07:24:07 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/21 21:32:26 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	rays_cast(t_bonus_game *game)
 	t_ray	ray;
 
 	i = 0;
-	angle = game->data.player.angle.rad - (FOV / 2.0);
+	angle = game->data.player.angle.rad - ((FOV * M_PI / 180) / 2.0);
 	while (i < WIN_WIDTH)
 	{
 		angle = game->data.player.angle.rad + (atan2f((i - WIN_WIDTH / 2.0),

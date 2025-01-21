@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:38:39 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/21 07:37:25 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/21 21:01:40 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ void	draw_ray(t_game *game, t_ray *ray, int w_idx)
 	while (++i < ray->casted.botm_y)
 	{
 		ft_mlx_pixel_put(&game->render_buf, w_idx, i,
-			get_texture_pixel(texture, tex_cord.x, tex_cord.y));
+			shade_color(get_texture_pixel(texture, tex_cord.x, tex_cord.y),
+				ray->casted.distance, ray->wall_hit_face));
 		tex_cord.y += step;
 	}
 	draw_bounds_line(game, (t_point){ray->casted.botm_y, WIN_HEIGHT, false},

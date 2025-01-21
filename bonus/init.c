@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:25:13 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/21 02:36:36 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/21 21:48:01 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,5 @@ void	init_bonus_game(t_bonus_game *game)
 	game->portal.frame_width = 64;
 	game->portal.frame_height = 64;
 	load_textures(game);
-	game->data.perp_distance = (WIN_WIDTH / 2) / tanf(FOV / 2);
+	game->data.perp_distance = (WIN_WIDTH / 2) / tanf((FOV * M_PI / 180) / 2);
 }

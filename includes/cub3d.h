@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 23:40:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/17 23:13:35 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/21 07:45:01 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CUB3D_H
 
 # include "mlx.h"
+# include "colors.h"
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <limits.h>
@@ -26,36 +27,15 @@
 # include <time.h>
 # include <unistd.h>
 
-# define D 100
-# define W 119
-# define A 97
-# define S 115
-# define E 101
-# define LEFT 65361
-# define SPACE 32
-# define RIGHT 65363
-# define CTRL 65507
-# define ESC 65307
 # define CUB_SIZE 32
-# define FOV 70 * (M_PI / 180)
+# define FOV 60 * (M_PI / 180)
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
-# define WALK_SPEED 1.5
-# define ROT_SPEED WALK_SPEED * (M_PI / 180)
+# define WALK_SPEED 1.0
+# define ROT_SPEED WALK_SPEED  * (M_PI / 180)
 # define MINI_MAP_SIZE 150
 # define MINI_MAP_SCALE_FACTOR 0.6
 # define this (WIN_WIDTH / 2) - tanf(FOV / 2)
-
-# define RED "\x1b[31m"
-# define GREEN "\x1b[32m"
-# define BLUE "\x1b[34m"
-# define YELLOW "\x1b[33m"
-# define MAGENTA "\x1b[35m"
-# define CYAN "\x1b[36m"
-# define RESET "\x1b[0m"
-# define BOLD "\x1b[1m"
-# define ITALIC "\x1b[3m"
-# define UNDERLINE "\x1b[4m"
 
 typedef struct s_point
 {
@@ -64,15 +44,6 @@ typedef struct s_point
 	bool		is_hit;
 }				t_point;
 
-typedef struct s_cast
-{
-	float		distance;
-	float		height;
-	float		top_y;
-	float		botm_y;
-	float		left_x;
-	float		right_x;
-} t_cast;
 
 typedef struct s_img
 {
@@ -85,37 +56,32 @@ typedef struct s_img
 	int			endian;
 }				t_img;
 
-typedef struct s_sprite
-{
-	t_img	img;
-	float	angle;
-	int		x;
-	int		y;
-	int		offset_x;
-	int		frame_width;
-	int		frame_height;
-	int		delta;
-	bool	is_visible;
-	t_cast	casted;
-} t_sprite;
-
 typedef struct s_angle
 {
-	float		deg;
 	float		rad;
 	float		cos;
 	float		sin;
 	float		tan;
 }				t_angle;
 
+typedef struct s_cast
+{
+	float		distance;
+	float		height;
+	float		top_y;
+	float		botm_y;
+	float		left_x;
+	float		right_x;
+} t_cast;
+
 typedef struct s_player
 {
 	float		x;
 	float		y;
 	t_angle		angle;
-	char		walk_dir; // 1 walk forward, -1 walk backward
-	char		turn_dir; // 1 turn right, -1 turn left
-	char		strafe_dir; // 1 strafe right, -1 strafe left
+	char		walk_dir;
+	char		strafe_dir;
+	char		turn_dir;
 }				t_player;
 
 
@@ -124,13 +90,10 @@ typedef struct s_ray
 	float		angle_tan;
 	float		x_step;
 	float		y_step;
-	float		distance;
-	float		wall_height;
-	int			top_px;
-	int			botm_px;
 	bool		facing_down;
 	bool		facing_left;
 	bool		wall_hit_face;
+	t_cast		casted;
 	t_point		horiz_wall_hit;
 	t_point		vert_wall_hit;
 	t_point		wall_hit;
@@ -141,44 +104,37 @@ typedef struct s_game
 {
 	void		*mlx;
 	void		*win;
-	int			map_width;
 	int			map_height;
 	char		**map;
-	float		distances[WIN_WIDTH];
 	t_player	player;
 	t_img		render_buf;
-	t_img		textures[6];
-	t_sprite	portal;
-	t_sprite	*collectibles;
-	int			collectibles_count;
-	int			collectibles_collected;
-	bool		spawn_portal;
-	bool		portal_effect;
-	bool		door_open;
-	bool		door_inrange;
-	bool		mouse_mode;
-	int			last_mouse_x;
+	t_img		textures[4];
+	int			f_color;
+	int			c_color;
     float       perp_distance;
 }				t_game;
 
-void    update_collectibles(t_game *game);
-void    update_portal(t_game *game);
+
+char    **create_map();
+size_t	get_map_width(t_game *game, t_ray *ray);
+void	set_distances(t_game *game, t_ray *ray, float *horz, float *vert);
+int	get_texture_pixel(t_img *texture, int x, int y);
+void	ft_mlx_pixel_put(t_img *data, int x, int y, int color);
+
+//////////// MECANICS /////////////
+
 bool    wall_collision_check(t_game *game, float x, float y);
 bool    check_surrondings(char **map, float x, float y, char c);
-void    generate_valid_coordinates(t_game *game, int *x, int *y);
-void    draw_sprite(t_game *game, t_sprite *sprite);
-void    set_sprite_dimensions(t_game *game, t_sprite  *sprite);
-bool    check_door_surrondings(char **map, float x, float y, char c);
-//////////// MINI_MAP /////////////
 
-void    draw_mini_ray(t_game *game, t_ray *ray);
-void    clear_mini_map_area(t_img *render_img);
-///////////////////////////////////////
+///////////////////////////////////
+
 
 //////////// INITIALIZING /////////////
 
 void			init_game(t_game *data);
 void			check_allocations(t_game *data);
+void    load_image(t_game *data, t_img *img, char *path);
+void			set_height(t_game *data);
 
 ///////////////////////////////////////
 
@@ -187,38 +143,29 @@ void			check_allocations(t_game *data);
 float			normalize_angle(float angle);
 float			distance_from_origin(t_player *player, float x, float y);
 void			cast_ray(t_game *game, t_ray *ray, float angle);
+t_point			set_horiz_intercept(t_game *game, t_ray *ray);
+t_point			set_vert_intercept(t_game *game, t_ray *ray);
+t_point			check_intersection(t_game *game, t_ray *ray, bool flag);
+void			perform_dda(t_game *game, t_ray *ray);
 
 //////////////////////////////////////
 
-////////////  DEBUGGING  //////////////
-
-void			draw_square(t_game *game, int x, int y, int size, int color);
-void			draw_circle(t_game *game, int x, int y, int radius, int color);
-void			draw_line(t_game *game, int x0, int y0, int x1, int y1,
-					int color);
-
-//////////////////////////////////////
 
 ////////////  EVENTS  /////////////////
 
 int				exit_routine(t_game *game);
 int				key_press(int key, t_game *game);
 int				key_release(int key, t_game *game);
-int				mouse_move(int x, int y, t_game *game);
-time_t			get_timestamp(void);
+
 //////////////////////////////////////
 
 ////////////  RENDER  /////////////////
 
 void			ft_mlx_pixel_put(t_img *data, int x, int y, int color);
-void			draw_mini_map(t_game *game);
-void			draw_player(t_game *game);
 void			draw_ray(t_game *game, t_ray *ray, int w_idx);
-void			draw_rectangle(t_game *game, int x, int y, int width,
-					int height, int color);
-void			cpy_sprite_frame(t_game *game, int x_offset, int y_offset, int size);
 int				get_texture_pixel(t_img *texture, int x, int y);
-int shade_color(int color, float distance, bool is_vertical);
+int				shade_color(int color, float distance, bool is_vertical);
+float			set_texture_cordinates(t_ray *ray, t_img *texture, t_point *cords);
 //////////////////////////////////////
 
 #endif

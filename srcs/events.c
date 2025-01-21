@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:39:41 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/17 23:37:09 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/19 23:36:19 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int exit_routine(t_game *game)
 {
     int i;
 
+    system("pkill vlc");
     i = 0;
     while (game->map && game->map[i])
     {
@@ -36,26 +37,38 @@ int exit_routine(t_game *game)
 
 int key_press(int key, t_game *game)
 {
-    if (key == ESC)
+    if (key == XK_Escape)
         exit_routine(game);
-    if (key == W)
+    if (key == XK_w)
         game->player.walk_dir = 1;
-    else if (key == A)
+    else if (key == XK_a)
         game->player.strafe_dir = -1;
-    else if (key == S)
+    else if (key == XK_s)
         game->player.walk_dir = -1;
-    else if (key == D)
+    else if (key == XK_d)
         game->player.strafe_dir = 1;
-    else if (key == LEFT)
+    else if (key == XK_Left)
         game->player.turn_dir = -1;
-    else if (key == RIGHT)
+    else if (key == XK_Right)
         game->player.turn_dir = 1;
-    else if (key == SPACE && game->collectibles_collected == game->collectibles_count)
+    else if (key == XK_space && game->world[game->world_idx].collected_coins == game->world[game->world_idx].n_coins)
         game->spawn_portal= true;
-    else if (key == E && game->door_inrange)
-            game->door_open = !game->door_open;
-    else if (key == CTRL)
+    else if (key == XK_Control_L)
+    {
         game->mouse_mode = !game->mouse_mode;
+        if (!game->mouse_mode)
+            mlx_mouse_hide(game->mlx, game->win);
+        else
+            mlx_mouse_show(game->mlx, game->win);
+    }
+    else if (key == XK_e && game->door_inrange)
+    {
+        if (game->door_open)
+            play_sound("./assets/sfx/door_close.mp3", "0.2");
+        else
+            play_sound("./assets/sfx/door_open.mp3", "0.2");
+        game->door_open = !game->door_open;
+    }
     return (0);
 }
 

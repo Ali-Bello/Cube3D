@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 01:58:11 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/21 21:32:26 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/22 03:02:21 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,24 +61,26 @@ int	update(t_bonus_game *game)
 	return (0);
 }
 
-void	play_sound(char *path, char *gain)
+void	*call_sound_cmd(void *result)
 {
-	char	result[100];
-	pid_t	pid;
+	system((char *)result);
+	free(result);
+	return (NULL);
+}
 
-	snprintf(result, sizeof(result), "cvlc --gain=%s\
-	--play-and-exit --quiet %s > /dev/null 2>&1", gain, path);
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("fork failed");
+void	play_sound(t_bonus_game *game, char *path, char *gain)
+{
+	char		*result;
+	pthread_t	thread;
+
+	(void)game;
+	result = calloc(100, sizeof(char));
+	if (result == NULL)
 		return ;
-	}
-	else if (pid == 0)
-	{
-		system(result);
-		exit(EXIT_FAILURE);
-	}
+	snprintf(result, 100, "cvlc --gain=%s --play-and-exit --quiet %s\
+		> /dev/null 2>&1", gain, path);
+	pthread_create(&thread, NULL, call_sound_cmd, result);
+	pthread_detach(thread);
 }
 
 int	main(void)
@@ -92,7 +94,7 @@ int	main(void)
 	mlx_hook(game.data.win, 2, (1L << 0), key_press_bonus, &game);
 	mlx_hook(game.data.win, 3, (1L << 1), key_release_bonus, &game);
 	mlx_loop_hook(game.data.mlx, &update, &game);
-	play_sound("./assets/sfx/background.mp3", "0.09");
+	play_sound(&game, "./assets/sfx/background.mp3", "0.09");
 	mlx_loop(game.data.mlx);
 	return (0);
 }

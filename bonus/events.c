@@ -6,33 +6,46 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:39:41 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/21 02:38:27 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/22 01:20:34 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_bonus.h"
+
+void	free_malloced_data(t_bonus_game *game)
+{
+	int	i;
+
+	free(game->world[0].coins);
+	free(game->world[1].coins);
+	i = -1;
+	while (game->data.map && game->data.map[++i])
+		free(game->data.map[i]);
+	free(game->data.map);
+	free(game->data.mlx);
+}
 
 int	exit_routine_bonus(t_bonus_game *game)
 {
 	int	i;
 
 	system("pkill vlc");
-	i = 0;
-	while (game->data.map && game->data.map[i])
-	{
-		free(game->data.map[i]);
-		i++;
-	}
-	free(game->data.map);
-	if (game->data.mlx)
-	{
-		if (game->data.render_buf.img)
-			mlx_destroy_image(game->data.mlx, game->data.render_buf.img);
-		if (game->data.win)
-			mlx_destroy_window(game->data.mlx, game->data.win);
-		mlx_destroy_display(game->data.mlx);
-	}
+	i = -1;
+	while (++i < 5)
+		mlx_destroy_image(game->data.mlx, game->world[0].textures[i].img);
+	i = -1;
+	while (++i < 5)
+		mlx_destroy_image(game->data.mlx, game->world[1].textures[i].img);
+	mlx_destroy_image(game->data.mlx, game->world[0].coins[0].img.img);
+	mlx_destroy_image(game->data.mlx, game->world[1].coins[0].img.img);
+	mlx_destroy_image(game->data.mlx, game->sky.img);
+	mlx_destroy_image(game->data.mlx, game->portal.img.img);
+	mlx_destroy_image(game->data.mlx, game->data.render_buf.img);
+	mlx_destroy_window(game->data.mlx, game->data.win);
+	mlx_destroy_display(game->data.mlx);
+	free_malloced_data(game);
 	exit(0);
+	return (0);
 }
 
 void	update_extras(int key, t_bonus_game *game)
@@ -55,9 +68,9 @@ void	update_extras(int key, t_bonus_game *game)
 				game->data.player.y, 'D'))
 		{
 			if (game->door_open)
-				play_sound("./assets/sfx/door_close.mp3", "0.2");
+				play_sound(game, "./assets/sfx/door_close.mp3", "0.2");
 			else
-				play_sound("./assets/sfx/door_open.mp3", "0.2");
+				play_sound(game, "./assets/sfx/door_open.mp3", "0.2");
 			game->door_open = !game->door_open;
 		}
 	}

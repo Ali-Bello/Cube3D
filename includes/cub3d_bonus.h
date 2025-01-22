@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 23:45:44 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/21 20:59:08 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/22 02:56:01 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <X11/keysym.h>
 # include <limits.h>
 # include <math.h>
+# include <pthread.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -45,8 +46,6 @@ typedef struct s_world
 {
 	t_img		textures[5];
 	t_sprite	*coins;
-	char		*bg_music;
-	char		*coin_music;
 	int			n_coins;
 	int			collected_coins;
 }				t_world;
@@ -67,6 +66,7 @@ typedef struct s_bonus_game
 	int			world_idx;
 }				t_bonus_game;
 
+void			free_malloced_data(t_bonus_game *game);
 void			update_player_position(t_bonus_game *game);
 void			update_mouse_interaction(t_bonus_game *game);
 float			get_casted_distance(t_bonus_game *game);
@@ -75,7 +75,7 @@ void			draw_rectangle(t_game *game, t_point pos, t_point dimens,
 void			draw_circle(t_game *game, t_point pos, int radius, int color);
 //////////// SOUND /////////////
 
-void			play_sound(char *path, char *gain);
+void			play_sound(t_bonus_game *game, char *path, char *gain);
 
 ///////////////////////////////////////
 

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:48:42 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/21 03:04:14 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/22 00:20:24 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ void	teleport_player(t_bonus_game *game)
 		game->data.player.x = new_x;
 		game->data.player.y = new_y;
 		system("pkill vlc");
-		play_sound("./assets/sfx/portal_sfx.mp3", "0.2");
+		play_sound(game, "./assets/sfx/portal_sfx.mp3", "0.2");
 		game->world_idx = !game->world_idx;
 		if (game->world_idx)
-			play_sound("./assets/sfx/background1.mp3", "0.09");
+			play_sound(game, "./assets/sfx/background1.mp3", "0.09");
 		else
-			play_sound("./assets/sfx/background.mp3", "0.09");
+			play_sound(game, "./assets/sfx/background.mp3", "0.09");
 		game->portal.x = 0;
 		game->portal.y = 0;
 	}

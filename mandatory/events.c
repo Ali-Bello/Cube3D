@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:39:41 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/20 00:05:22 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/21 22:50:37 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,21 @@ int	exit_routine(t_game *game)
 {
 	int	i;
 
-	i = 0;
-	while (game->map && game->map[i])
-	{
+	i = -1;
+	while (game->map && game->map[++i])
 		free(game->map[i]);
-		i++;
-	}
 	free(game->map);
 	if (game->mlx)
 	{
+		i = -1;
+		while (++i < 4)
+			mlx_destroy_image(game->mlx, game->textures[i].img);
 		if (game->render_buf.img)
 			mlx_destroy_image(game->mlx, game->render_buf.img);
 		if (game->win)
 			mlx_destroy_window(game->mlx, game->win);
 		mlx_destroy_display(game->mlx);
+		free(game->mlx);
 	}
 	exit(0);
 }

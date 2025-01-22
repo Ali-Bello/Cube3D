@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 16:55:28 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/21 02:55:38 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/22 00:20:03 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	update_collectibles(t_bonus_game *game)
 			game->world[game->world_idx].coins[i].is_visible = false;
 			game->world[game->world_idx].coins[i].x = -1;
 			game->world[game->world_idx].coins[i].y = -1;
-			play_sound("./assets/sfx/coin.mp3", "0.15");
+			play_sound(game, "./assets/sfx/coin.mp3", "0.15");
 		}
 		else if (game->world[game->world_idx].coins[i].is_visible)
 			render_collectibles(game, i);

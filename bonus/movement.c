@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 02:33:20 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/22 01:09:21 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/23 20:46:33 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ bool	wall_collision_check_bonus(t_bonus_game *game, float x, float y)
 	int	map_x;
 	int	map_y;
 
-	map_x = (int)(floorf(x) / CUB_SIZE);
-	map_y = (int)(floorf(y) / CUB_SIZE);
+	map_x = (int)(x / CUB_SIZE);
+	map_y = (int)(y / CUB_SIZE);
 	if (game->data.map[map_y][map_x] == '1' || map_x < 0 || map_y < 0)
 		return (true);
 	if (!game->door_open && check_surrondings(game->data.map, x, y, 'D'))
@@ -46,7 +46,7 @@ void	update_mouse_interaction(t_bonus_game *game)
 	dx = (x - WIN_WIDTH / 2);
 	if (dx != 0)
 	{
-		game->data.player.angle.rad += (ROT_SPEED * M_PI / 180) * dx / 35.0;
+		game->data.player.angle.rad += (ROT_SPEED * (M_PI / 180)) * dx / 10.0;
 		mlx_mouse_move(game->data.mlx, game->data.win, WIN_WIDTH / 2, WIN_HEIGHT
 			/ 2);
 	}
@@ -86,6 +86,6 @@ void	update_player_position(t_bonus_game *game)
 			* move_step) + (sinf(game->data.player.angle.rad + M_PI_2)
 			* strafe_step);
 	game->data.player.angle.rad += (game->data.player.turn_dir
-			* (ROT_SPEED * M_PI / 180));
+			* (ROT_SPEED * (M_PI / 180)));
 	move_player(game, next_map_player_x, next_map_player_y);
 }

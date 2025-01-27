@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 23:40:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/27 21:29:42 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 00:39:13 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,17 @@
 # include "libft.h"
 # include "colors.h"
 # include "parsing.h"
-# include "mlx.h"
+# include <mlx.h>
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <limits.h>
 # include <math.h>
 # include <stdbool.h>
-# include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
-# include <sys/time.h>
-# include <time.h>
 # include <unistd.h>
 
 # define CUB_SIZE 32
-# define FOV 60
+# define FOV 70
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 # define WALK_SPEED 1.0

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 02:55:33 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/27 18:55:33 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 23:54:36 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	clear_mini_map_area(t_img *render_img)
 	int	j;
 
 	i = -1;
-	while (++i < MINI_MAP_SIZE)
+	while (++i <= MINI_MAP_SIZE)
 	{
 		j = -1;
-		while (++j < MINI_MAP_SIZE)
+		while (++j <= MINI_MAP_SIZE)
 			ft_mlx_pixel_put(render_img, j, i, 0x000000);
 	}
 }
@@ -32,11 +32,11 @@ void	draw_mini_ray(t_bonus_game *game, t_ray *ray)
 	int	mini_y;
 
 	mini_x = ray->wall_hit.x * MINI_MAP_SCALE_FACTOR + (int)(MINI_MAP_SIZE / 2
-			- (floorf(game->data.player.x) * MINI_MAP_SCALE_FACTOR));
+			- (game->data.player.x * MINI_MAP_SCALE_FACTOR));
 	mini_y = ray->wall_hit.y * MINI_MAP_SCALE_FACTOR + (int)(MINI_MAP_SIZE / 2
-			- (floorf(game->data.player.y) * MINI_MAP_SCALE_FACTOR));
+			- (game->data.player.y * MINI_MAP_SCALE_FACTOR));
 	draw_line(game, (t_point){MINI_MAP_SIZE / 2, MINI_MAP_SIZE / 2, true},
-		(t_point){mini_x, mini_y, true}, 0x3a3a50);
+		(t_point){mini_x, mini_y, true}, 0x3a3a40);
 }
 
 void	draw_mini_sprite(t_bonus_game *game, t_sprite *sprite, t_point offset)
@@ -69,15 +69,15 @@ void	draw_map_content(t_bonus_game *game, t_point pos, t_point offset,
 		int size)
 {
 	if (game->data.map[(int)pos.y][(int)pos.x] == '1')
-		draw_rectangle(&game->data, (t_point){(int)pos.x * CUB_SIZE
-			* MINI_MAP_SCALE_FACTOR + offset.x, (int)pos.y * CUB_SIZE
-			* MINI_MAP_SCALE_FACTOR + offset.y, true}, (t_point){size, size,
-			true}, 0xAAAAAAA);
+		draw_rectangle(&game->data, (t_point){(int)(pos.x * CUB_SIZE
+				* MINI_MAP_SCALE_FACTOR) + offset.x, (int)(pos.y * CUB_SIZE
+				* MINI_MAP_SCALE_FACTOR) + offset.y, true}, (t_point){size,
+			size, true}, 0xAAAAAAA);
 	else if (game->data.map[(int)pos.y][(int)pos.x] == 'D')
-		draw_rectangle(&game->data, (t_point){pos.x * CUB_SIZE
-			* MINI_MAP_SCALE_FACTOR + offset.x, pos.y * CUB_SIZE
-			* MINI_MAP_SCALE_FACTOR + offset.y, true}, (t_point){size - 1, size
-			/ 2, true}, 0x4f6b82);
+		draw_rectangle(&game->data, (t_point){(int)(pos.x * CUB_SIZE
+				* MINI_MAP_SCALE_FACTOR) + offset.x, (int)(pos.y * CUB_SIZE
+				* MINI_MAP_SCALE_FACTOR) + offset.y, true}, (t_point){size - 1,
+			size / 2, true}, 0x4f6b82);
 }
 
 void	draw_mini_map(t_bonus_game *game)
@@ -87,9 +87,9 @@ void	draw_mini_map(t_bonus_game *game)
 	int		i;
 	int		j;
 
-	offset.x = MINI_MAP_SIZE / 2 - (game->data.player.x
+	offset.x = (MINI_MAP_SIZE / 2) - (game->data.player.x
 			* MINI_MAP_SCALE_FACTOR);
-	offset.y = MINI_MAP_SIZE / 2 - (game->data.player.y
+	offset.y = (MINI_MAP_SIZE / 2) - (game->data.player.y
 			* MINI_MAP_SCALE_FACTOR);
 	scaled_size = CUB_SIZE * MINI_MAP_SCALE_FACTOR + 1;
 	i = -1;

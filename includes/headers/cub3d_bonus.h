@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 23:45:44 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/27 19:45:49 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 00:25:22 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,9 @@
 # define CUB3D_BONUS_H
 
 # include "cub3d.h"
-# include "mlx.h"
-# include <X11/X.h>
-# include <X11/keysym.h>
-# include <limits.h>
-# include <math.h>
-# include <pthread.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
 # include <sys/time.h>
 # include <time.h>
-# include <unistd.h>
+# include <pthread.h>
 
 typedef struct s_sprite
 {
@@ -66,81 +56,73 @@ typedef struct s_bonus_game
 	int			world_idx;
 }				t_bonus_game;
 
+/*
+ ********* INITIALIZING
+*/
+
+int				init_bonus_game(t_bonus_game *data, t_parse *parse);
 void			destroy_mlx_imgs(t_bonus_game *game);
 void			free_malloced_data(t_bonus_game *game);
-void			update_player_position(t_bonus_game *game);
-void			update_mouse_interaction(t_bonus_game *game);
+
+/*
+ ********** RAYCASTING 
+*/
+
 float			get_casted_distance(t_bonus_game *game);
+void			draw_circle(t_game *game, t_point pos, int radius, int color);
+void			cast_ray_bonus(t_bonus_game *game, t_ray *ray, float angle);
+t_point			check_intersection_bonus(t_bonus_game *game, t_ray *ray,
+					bool flag);
+
+/*
+ ********** RENDERING
+*/
+
+void			draw_mini_map(t_bonus_game *game);
+void			draw_ray_bonus(t_bonus_game *game, t_ray *ray, int w_idx);
 void			draw_rectangle(t_game *game, t_point pos, t_point dimens,
 					int color);
-void			draw_circle(t_game *game, t_point pos, int radius, int color);
-//////////// SOUND /////////////
-
-void			play_sound(t_bonus_game *game, char *path, char *gain);
-
-///////////////////////////////////////
-
-//////////// COLLECTIBLES /////////////
-
-void			update_collectibles(t_bonus_game *game);
-void			generate_valid_coordinates(t_bonus_game *game, int *x, int *y);
-
-///////////////////////////////////////
-
-//////////// SPRITE ANIMATIONS /////////////
-
 void			set_sprite_dimensions(t_bonus_game *game, t_sprite *sprite);
 void			draw_sprite(t_bonus_game *game, t_sprite *sprite);
-
-////////////////////////////////////////////
-
-//////////// PORTAL /////////////
-
-void			generate_valid_coordinates(t_bonus_game *game, int *x, int *y);
-void			update_portal(t_bonus_game *game);
-
-/////////////////////////////////
-
-//////////// MECANICS /////////////
-
-bool			wall_collision_check_bonus(t_bonus_game *game, float x,
-					float y);
-
-///////////////////////////////////
-
-//////////// MINI_MAP /////////////
-
 void			draw_mini_ray(t_bonus_game *game, t_ray *ray);
 void			clear_mini_map_area(t_img *render_img);
 void			draw_line(t_bonus_game *game, t_point start, t_point end,
 					int color);
-///////////////////////////////////////
 
-//////////// INITIALIZING /////////////
-
-int				init_bonus_game(t_bonus_game *data, t_parse *parse);
-///////////////////////////////////////
-
-////////////  RAYCASTING  /////////////
-
-float			normalize_angle(float angle);
-float			distance_from_origin(t_player *player, float x, float y);
-void			cast_ray_bonus(t_bonus_game *game, t_ray *ray, float angle);
-t_point			check_intersection_bonus(t_bonus_game *game, t_ray *ray,
-					bool flag);
-//////////////////////////////////////
-
-////////////  EVENTS  /////////////////
+/*
+ ********** EVENTS
+*/
 
 int				exit_routine_bonus(t_bonus_game *game);
 int				key_press_bonus(int key, t_bonus_game *game);
 int				key_release_bonus(int key, t_bonus_game *game);
-//////////////////////////////////////
 
-////////////  RENDER  /////////////////
+/*
+ ********** GAME MECHANISM
+*/
 
-void			draw_mini_map(t_bonus_game *game);
-void			draw_ray_bonus(t_bonus_game *game, t_ray *ray, int w_idx);
-//////////////////////////////////////
+void			update_player_position(t_bonus_game *game);
+void			update_mouse_interaction(t_bonus_game *game);
+bool			wall_collision_check_bonus(t_bonus_game *game, float x,
+					float y);
+void			generate_valid_coordinates(t_bonus_game *game, int *x, int *y);
+
+/*
+ ********** SOUND EFFECTS
+*/
+
+void			play_sound(t_bonus_game *game, char *path, char *gain);
+
+/*
+ ********** COLLECTIBLES
+*/
+
+void			update_collectibles(t_bonus_game *game);
+
+/*
+ ********** PORTAL
+*/
+
+void			update_portal(t_bonus_game *game);
 
 #endif

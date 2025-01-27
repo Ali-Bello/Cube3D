@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:40:34 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/27 00:38:54 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 00:38:27 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	perform_dda(t_game *game, t_ray *ray)
 
 void	cast_ray(t_game *game, t_ray *ray, float angle)
 {
-	memset(ray, 0, sizeof(t_ray));
+	ft_memset(ray, 0, sizeof(t_ray));
 	angle = normalize_angle(angle);
 	ray->angle_tan = tanf(angle);
 	ray->facing_down = angle > 0 && angle < M_PI;

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 01:58:11 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/27 21:27:51 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 00:08:08 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ int	update(t_bonus_game *game)
 	update_player_position(game);
 	mlx_clear_window(game->data.mlx, game->data.win);
 	rays_cast(game);
-	draw_mini_map(game);
 	if (game->world[game->world_idx].collected_coins
 		!= game->world[game->world_idx].n_coins)
 		update_collectibles(game);
 	if (game->spawn_portal)
 		update_portal(game);
+	draw_mini_map(game);
 	mlx_put_image_to_window(game->data.mlx, game->data.win,
 		game->data.render_buf.img, 0, 0);
 	return (0);
@@ -88,9 +88,11 @@ int	main(int ac, char **av)
 	t_parse			parse;
 
 	if (ac != 2)
-		return (print_err(NULL,
-				"Wrong input\nUsage: [./cub3D] [path_to_cub_file]", 1),
-			EXIT_FAILURE);
+		return (print_err(NULL, "Wrong input\nUsage: [./cub3D]\
+			[path_to_cub_file]", 1), EXIT_FAILURE);
+	if (FOV <= 0 || FOV > 130 || CUB_SIZE <= 0 || WALK_SPEED <= 0
+		|| ROT_SPEED <= 0 || WIN_WIDTH <= 0 || WIN_HEIGHT <= 0)
+		return (print_err(NULL, "Invalid Constants", 1), EXIT_FAILURE);
 	ft_memset(&parse, 0, sizeof(t_parse));
 	parse.floor_color = -1;
 	parse.ceil_color = -1;

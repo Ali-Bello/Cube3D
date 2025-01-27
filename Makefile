@@ -13,13 +13,11 @@ BONUS_NAME = cub3d_bonus
 
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
 
-MLX_FLAGS = -lXext -lX11 -lm
+MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 
 OBJS_DIR = objs
 
 LIBFT_PATH = includes/libft
-
-MLX_LIB = includes/libmlx_Linux.a
 
 LIBFT = includes/libft/libft.a
 
@@ -50,7 +48,7 @@ BONUS_OBJS = $(patsubst srcs/bonus/%.c, $(OBJS_DIR)/bonus/%.o, $(COMBINED_BSRCS)
 all : $(NAME)
 
 $(NAME) : $(OBJS) $(LIBFT)
-	@cc $(CFLAGS) $(OBJS) $(MLX_LIB) $(MLX_FLAGS) $(LIBFT) -o $@
+	@cc $(CFLAGS) $(OBJS) $(MLX_FLAGS) $(LIBFT) -o $@
 	@printf "$(ERASE)$(GREEN)--> $@ made <--$(END)\n"
 
 $(OBJS_DIR)/%.o: srcs/%.c Makefile includes/headers/cub3d.h includes/headers/parsing.h
@@ -65,7 +63,7 @@ $(LIBFT): $(LIBFT_PATH)
 bonus : $(BONUS_NAME)
 
 $(BONUS_NAME) : $(BONUS_OBJS) $(LIBFT)
-	@cc $(CFLAGS) $(BONUS_OBJS) $(MLX_LIB) $(MLX_FLAGS) $(LIBFT) -o $@
+	@cc $(CFLAGS) $(BONUS_OBJS) $(MLX_FLAGS) $(LIBFT) -o $@
 	@printf "$(ERASE)$(GREEN)--> $@ made <--$(END)\n"
 
 $(OBJS_DIR)/bonus/%.o:srcs/bonus/%.c Makefile includes/headers/cub3d.h includes/headers/cub3d_bonus.h includes/headers/parsing.h

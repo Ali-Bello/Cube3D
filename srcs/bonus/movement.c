@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 02:33:20 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/27 18:55:40 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 23:58:02 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,22 @@ bool	wall_collision_check_bonus(t_bonus_game *game, float x, float y)
 
 void	update_mouse_interaction(t_bonus_game *game)
 {
-	int	x;
-	int	y;
-	int	dx;
+	static int	prev_x;
+	int			x;
+	int			dx;
 
-	mlx_mouse_get_pos(game->data.mlx, game->data.win, &x, &y);
+	mlx_mouse_get_pos(game->data.mlx, game->data.win, &x, &dx);
+	if (!prev_x)
+	{
+		prev_x = x;
+		return ;
+	}
 	dx = (x - WIN_WIDTH / 2);
 	if (dx != 0)
 	{
-		game->data.player.angle.rad += (ROT_SPEED * (M_PI / 180)) * dx / 10.0;
-		mlx_mouse_move(game->data.mlx, game->data.win, WIN_WIDTH / 2, WIN_HEIGHT
-			/ 2);
+		game->data.player.angle.rad += ((ROT_SPEED / 7.0) * (M_PI / 180)) * dx;
+		mlx_mouse_move(game->data.mlx, game->data.win, WIN_WIDTH / 2,
+			WIN_HEIGHT / 2);
 	}
 }
 

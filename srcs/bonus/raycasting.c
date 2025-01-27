@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:40:34 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/27 19:31:12 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 00:38:23 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_point	check_intersection_bonus(t_bonus_game *game, t_ray *ray, bool flag)
 
 void	cast_ray_bonus(t_bonus_game *game, t_ray *ray, float angle)
 {
-	memset(ray, 0, sizeof(t_ray));
+	ft_memset(ray, 0, sizeof(t_ray));
 	angle = normalize_angle(angle);
 	ray->angle_tan = tanf(angle);
 	ray->facing_down = angle > 0 && angle < M_PI;

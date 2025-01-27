@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 17:52:39 by elbaraka          #+#    #+#             */
-/*   Updated: 2025/01/27 21:26:44 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 23:36:26 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ bool	check_player_surronding(t_parse *parse, int i, int j)
 {
 	if (j <= 0 || ft_isspace(parse->map[i][j - 1]))
 		return (true);
-	if (!parse->map[j + 1] || ft_isspace(parse->map[i][j + 1]))
+	if (j >= (int)ft_strlen(parse->map[i])
+		|| ft_isspace(parse->map[i][j + 1]))
 		return (true);
 	if (i <= 0 || j >= (int)ft_strlen(parse->map[i - 1])
 		|| ft_isspace(parse->map[i - 1][j]))

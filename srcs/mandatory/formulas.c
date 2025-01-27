@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 21:56:41 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/27 00:38:54 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 00:38:11 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ size_t	get_map_line_width(t_game *game, t_ray *ray)
 
 	if (ray->start.y >= 0 && ray->start.y / CUB_SIZE < game->map_height
 		&& game->map[(int)(ray->start.y / CUB_SIZE)])
-		width = strlen(game->map[(int)(ray->start.y / CUB_SIZE)]);
+		width = ft_strlen(game->map[(int)(ray->start.y / CUB_SIZE)]);
 	else
 		width = 0;
 	return (width);

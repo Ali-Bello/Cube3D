@@ -7,7 +7,7 @@ CYAN		:=	\033[36m
 BOLD		:=	\033[1m
 END			:=	\033[0m
 
-NAME = cub3d
+NAME = cub3D
 
 BONUS_NAME = cub3d_bonus
 

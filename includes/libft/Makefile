@@ -31,7 +31,7 @@ $(OBJS_DIR)/%.o: %.c
 
 $(NAME): $(OBJS)
 	@ar rcs $(NAME) $(OBJS)
-	@printf "$(CYAN)=> $(NAME) made successfully.$(END)\n"
+	@printf "$(ERASE)$(CYAN)=> $(NAME) made successfully.$(END)\n"
 
 clean:
 	@rm -f $(OBJS) $(BOBJS)

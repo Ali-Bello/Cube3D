@@ -15,52 +15,76 @@ CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
 
 MLX_FLAGS = -lXext -lX11 -lm
 
-SRCS = mandatory/raycasting.c mandatory/pixels.c mandatory/events.c mandatory/render.c\
-		mandatory/init.c mandatory/formulas.c mandatory/main.c
-
-BONUS_SRCS = bonus/events.c bonus/render.c bonus/init.c bonus/collectibles.c bonus/mini_map.c\
-			bonus/portal.c bonus/debugging.c bonus/raycasting.c bonus/movement.c bonus/main.c mandatory/render.c\
-			mandatory/init.c mandatory/raycasting.c mandatory/events.c mandatory/pixels.c mandatory/formulas.c
-
 OBJS_DIR = objs
 
-OBJS = $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
+LIBFT_PATH = includes/libft
 
-BONUS_OBJS = $(addprefix $(OBJS_DIR)/, $(BONUS_SRCS:.c=.o))
+MLX_LIB = includes/libmlx_Linux.a
 
-MLX_LIB = libmlx_Linux.a
+LIBFT = includes/libft/libft.a
+
+PARSING_SRCS = srcs/parsing/parse.c srcs/parsing/parse_map.c srcs/parsing/map.c \
+			srcs/parsing/map_walls.c srcs/parsing/textures.c srcs/parsing/colors.c \
+			srcs/parsing/ft_error.c
+
+MANDATORY_SRCS = srcs/mandatory/raycasting.c srcs/mandatory/pixels.c srcs/mandatory/events.c \
+		srcs/mandatory/render.c srcs/mandatory/init.c srcs/mandatory/formulas.c \
+		srcs/mandatory/main.c
+
+BONUS_SRCS = srcs/bonus/events.c srcs/bonus/render.c srcs/bonus/init.c \
+			srcs/bonus/collectibles.c srcs/bonus/mini_map.c srcs/bonus/portal.c \
+			srcs/bonus/debugging.c srcs/bonus/raycasting.c srcs/bonus/movement.c \
+			srcs/mandatory/formulas.c srcs/mandatory/render.c srcs/mandatory/init.c \
+			srcs/mandatory/raycasting.c srcs/mandatory/events.c srcs/mandatory/pixels.c \
+			srcs/bonus/main.c
+
+COMBINED_SRCS = $(PARSING_SRCS) $(MANDATORY_SRCS)
+
+COMBINED_BSRCS = $(PARSING_SRCS) $(BONUS_SRCS)
+
+OBJS = $(patsubst srcs/%.c, $(OBJS_DIR)/%.o, $(COMBINED_SRCS))
+
+BONUS_OBJS = $(patsubst srcs/%.c, $(OBJS_DIR)/%.o, $(COMBINED_BSRCS))
+
 
 all : $(NAME)
 
-$(NAME) : $(OBJS)
-	@cc $(CFLAGS) $(OBJS) $(MLX_LIB) $(MLX_FLAGS) -o $@
+$(NAME) : $(OBJS) $(LIBFT)
+	@cc $(CFLAGS) $(OBJS) $(MLX_LIB) $(MLX_FLAGS) $(LIBFT) -o $@
 	@printf "$(ERASE)$(GREEN)--> $@ made <--$(END)\n"
 
-$(OBJS_DIR)/mandatory/%.o: mandatory/%.c Makefile includes/cub3d.h
+$(OBJS_DIR)/%.o: srcs/%.c Makefile includes/headers/cub3d.h includes/headers/parsing.h
 	@mkdir -p $(OBJS_DIR)
-	@mkdir -p $(OBJS_DIR)/mandatory
+	@mkdir -p $(OBJS_DIR)/mandatory $(OBJS_DIR)/parsing
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@printf "$(BLUE) > Compilation :$(END) $<\r"
 
-$(BONUS_NAME) : $(BONUS_OBJS)
+$(LIBFT): $(LIBFT_PATH)
+	@make -C $(LIBFT_PATH) --no-print-directory
+
+$(BONUS_NAME) : $(BONUS_OBJS) $(LIBFT_PATH)
 	@cc $(CFLAGS) $(BONUS_OBJS) $(MLX_LIB) $(MLX_FLAGS) -o $@
 	@printf "$(ERASE)$(GREEN)--> $@ made <--$(END)\n"
 
-$(OBJS_DIR)/bonus/%.o: bonus/%.c Makefile includes/cub3d_bonus.h includes/cub3d.h
+$(OBJS_DIR)/%.o: %.c Makefile includes/headers/cub3d.h includes/headers/parsing.h
 	@mkdir -p $(OBJS_DIR)
-	@mkdir -p $(OBJS_DIR)/bonus
+	@mkdir -p $(OBJS_DIR)/mandatory $(OBJS_DIR)/parsing
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@printf "$(BLUE) > Compilation :$(END) $<\r"
 
 clean :
+	@make -C $(LIBFT_PATH) clean --no-print-directory
 	@printf "$(MAGENTA)-->	$(OBJS_DIR) removed$(END)\n"
 	@rm -rdf $(OBJS_DIR)
 
 fclean : clean
+	@rm -f $(NAME) $(BONUS_NAME)
+	@rm -f $(LIBFT)
 	@printf "$(MAGENTA)-->	$(NAME) removed$(END)\n"
-	@rm -f $(NAME)
-	@rm -f $(BONUS_NAME)
 
 re : fclean all
 
 bonus : $(BONUS_NAME)
+
+.PHONY: all clean fclean re
+.SECONDARY:	$(OBJS)

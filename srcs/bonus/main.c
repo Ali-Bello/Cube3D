@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 01:58:11 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/27 20:43:27 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 21:27:51 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int	update(t_bonus_game *game)
 	game->data.player.angle.tan = tanf(game->data.player.angle.rad);
 	game->data.player.angle.rad = normalize_angle(game->data.player.angle.rad);
 	clear_mini_map_area(&game->data.render_buf);
-	// if (!game->mouse_mode)
-	// 	update_mouse_interaction(game);
+	if (!game->mouse_mode)
+		update_mouse_interaction(game);
 	update_player_position(game);
 	mlx_clear_window(game->data.mlx, game->data.win);
 	rays_cast(game);
@@ -88,8 +88,9 @@ int	main(int ac, char **av)
 	t_parse			parse;
 
 	if (ac != 2)
-		return (print_err(NULL, "Wrong input\nUsage: [./cub3D] [path_to_cub_file]",
-			1), EXIT_FAILURE);
+		return (print_err(NULL,
+				"Wrong input\nUsage: [./cub3D] [path_to_cub_file]", 1),
+			EXIT_FAILURE);
 	ft_memset(&parse, 0, sizeof(t_parse));
 	parse.floor_color = -1;
 	parse.ceil_color = -1;

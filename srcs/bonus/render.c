@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:38:39 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/27 20:46:00 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 21:28:22 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ void	destroy_mlx_imgs(t_bonus_game *game)
 	{
 		while (++i < 5)
 			if (game->world[0].textures[i].img)
-				mlx_destroy_image(game->data.mlx, game->world[0].textures[i].img);
+				mlx_destroy_image(game->data.mlx,
+					game->world[0].textures[i].img);
 		i = -1;
 		while (++i < 5)
 			if (game->world[1].textures[i].img)
-				mlx_destroy_image(game->data.mlx, game->world[1].textures[i].img);
+				mlx_destroy_image(game->data.mlx,
+					game->world[1].textures[i].img);
 		if (game->world[0].coins && game->world[0].coins[0].img.img)
 			mlx_destroy_image(game->data.mlx, game->world[0].coins[0].img.img);
 		if (game->world[0].coins && game->world[1].coins[0].img.img)
@@ -38,6 +40,7 @@ void	destroy_mlx_imgs(t_bonus_game *game)
 			mlx_destroy_image(game->data.mlx, game->data.render_buf.img);
 	}
 }
+
 int	get_texture_id_bonus(t_bonus_game *game, t_ray *ray)
 {
 	int	tex_id;
@@ -109,9 +112,9 @@ void	draw_ray_bonus(t_bonus_game *game, t_ray *ray, int w_idx)
 		tex_cord.y += step;
 	}
 	if (game->portal_effect)
-		draw_floor(game, (t_point){ray->casted.botm_y,
-			WIN_HEIGHT, true}, w_idx, 0x4D3823);
+		draw_floor(game, (t_point){ray->casted.botm_y, WIN_HEIGHT, true}, w_idx,
+			0x4D3823);
 	else
-		draw_floor(game, (t_point){ray->casted.botm_y,
-			WIN_HEIGHT, true}, w_idx, 0x8C6756);
+		draw_floor(game, (t_point){ray->casted.botm_y, WIN_HEIGHT, true}, w_idx,
+			0x8C6756);
 }

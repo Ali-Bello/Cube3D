@@ -48,8 +48,8 @@ static int	handle_pre_map_content(t_parse *parse, char *line)
 		return (parse_textures(parse, line));
 	else if (!ft_strncmp(line, "F ", 2) || !ft_strncmp(line, "C ", 2))
 		return (parse_colors(parse, line));
-	else if (parse->floor_color != -1
-		&& parse->ceil_color != -1 && ft_strchr("01NSWE \t\r", *line))
+	else if (parse->floor_color != -1 && parse->ceil_color != -1
+		&& ft_strchr("01NSWE \t\r", *line))
 		return (get_map_line(parse, line));
 	else
 		return (print_err(NULL, "Invalid configuration", 1), 1);

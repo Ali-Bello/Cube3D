@@ -61,8 +61,8 @@ void	update_player_position(t_game *game)
 		+ (cosf(game->player.angle.rad + M_PI_2) * strafe_step);
 	next_map_player_y = game->player.y + (game->player.angle.sin * move_step)
 		+ (sinf(game->player.angle.rad + M_PI_2) * strafe_step);
-	game->player.angle.rad += (game->player.turn_dir
-			* (ROT_SPEED * (M_PI / 180)));
+	game->player.angle.rad += (game->player.turn_dir * (ROT_SPEED * (M_PI
+					/ 180)));
 	if (!wall_collision_check(game, next_map_player_x, next_map_player_y))
 	{
 		game->player.x = next_map_player_x;
@@ -92,11 +92,12 @@ int	update(t_game *game)
 int	main(int ac, char **av)
 {
 	t_game	game;
-	t_parse parse;
+	t_parse	parse;
 
 	if (ac != 2)
-		return (print_err(NULL, "Wrong input\nUsage: [./cub3D] [path_to_cub_file]",
-			1), EXIT_FAILURE);
+		return (print_err(NULL,
+				"Wrong input\nUsage: [./cub3D] [path_to_cub_file]", 1),
+			EXIT_FAILURE);
 	ft_memset(&parse, 0, sizeof(t_parse));
 	parse.floor_color = -1;
 	parse.ceil_color = -1;

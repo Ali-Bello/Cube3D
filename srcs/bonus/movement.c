@@ -61,11 +61,9 @@ void	move_player(t_bonus_game *game, float x, float y)
 	}
 	else
 	{
-		if (!wall_collision_check_bonus(game, x,
-				game->data.player.y))
+		if (!wall_collision_check_bonus(game, x, game->data.player.y))
 			game->data.player.x = x;
-		else if (!wall_collision_check_bonus(game, game->data.player.x,
-				y))
+		else if (!wall_collision_check_bonus(game, game->data.player.x, y))
 			game->data.player.y = y;
 	}
 }
@@ -85,7 +83,7 @@ void	update_player_position(t_bonus_game *game)
 	next_map_player_y = game->data.player.y + (game->data.player.angle.sin
 			* move_step) + (sinf(game->data.player.angle.rad + M_PI_2)
 			* strafe_step);
-	game->data.player.angle.rad += (game->data.player.turn_dir
-			* (ROT_SPEED * (M_PI / 180)));
+	game->data.player.angle.rad += (game->data.player.turn_dir * (ROT_SPEED
+				* (M_PI / 180)));
 	move_player(game, next_map_player_x, next_map_player_y);
 }

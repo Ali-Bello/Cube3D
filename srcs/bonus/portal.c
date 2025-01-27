@@ -12,25 +12,25 @@
 
 #include "../../includes/headers/cub3d_bonus.h"
 
-void    generate_valid_coordinates(t_bonus_game *game, int *x, int *y)
+void	generate_valid_coordinates(t_bonus_game *game, int *x, int *y)
 {
-    size_t  width;
-    int     map_x;
-    int     map_y;
-    bool    valid;
+	size_t	width;
+	int		map_x;
+	int		map_y;
+	bool	valid;
 
-    valid = false;
-    while (!valid)
-    {
-        map_y = rand() % game->data.map_height;
-        width = ft_strlen(game->data.map[map_y]);
-        map_x = rand() % width;
-        *x = map_x * CUB_SIZE + (CUB_SIZE / 2);
-        *y = map_y * CUB_SIZE + (CUB_SIZE / 2);
-        if (game->data.map[map_y][map_x] == '0' && 
-            !wall_collision_check_bonus(game, *x, *y))
-            valid = true;
-    }
+	valid = false;
+	while (!valid)
+	{
+		map_y = rand() % game->data.map_height;
+		width = ft_strlen(game->data.map[map_y]);
+		map_x = rand() % width;
+		*x = map_x * CUB_SIZE + (CUB_SIZE / 2);
+		*y = map_y * CUB_SIZE + (CUB_SIZE / 2);
+		if (game->data.map[map_y][map_x] == '0'
+			&& !wall_collision_check_bonus(game, *x, *y))
+			valid = true;
+	}
 }
 
 void	teleport_player(t_bonus_game *game)

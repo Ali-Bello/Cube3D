@@ -39,7 +39,7 @@ int	load_image(t_game *data, t_img *img, char *path)
 	return (0);
 }
 
-int		load_textures(t_game *game, t_parse *parse)
+int	load_textures(t_game *game, t_parse *parse)
 {
 	if (load_image(game, &game->textures[0], parse->no_text))
 		return (1);
@@ -72,4 +72,3 @@ int	init_game(t_game *game, t_parse *parse)
 		return (print_err("mlx", "failed to create a window", 1));
 	return (0);
 }
-

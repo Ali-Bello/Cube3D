@@ -23,10 +23,10 @@ void	draw_rectangle(t_game *game, t_point pos, t_point dimens, int color)
 		j = 0;
 		while (j < dimens.x)
 		{
-			if (pos.x + j >= 0 && pos.x + j <= MINI_MAP_SIZE
-				&& pos.y + i >= 0 && pos.y + i <= MINI_MAP_SIZE)
-				ft_mlx_pixel_put(&game->render_buf, pos.x + j,
-					pos.y + i, color);
+			if (pos.x + j >= 0 && pos.x + j <= MINI_MAP_SIZE && pos.y + i >= 0
+				&& pos.y + i <= MINI_MAP_SIZE)
+				ft_mlx_pixel_put(&game->render_buf, pos.x + j, pos.y + i,
+					color);
 			j++;
 		}
 		i++;
@@ -45,8 +45,8 @@ void	draw_circle(t_game *game, t_point pos, int radius, int color)
 		while (j < radius)
 		{
 			if ((i * i) + (j * j) < radius * radius)
-				ft_mlx_pixel_put(&game->render_buf, pos.x + j,
-					pos.y + i, color);
+				ft_mlx_pixel_put(&game->render_buf, pos.x + j, pos.y + i,
+					color);
 			j++;
 		}
 		i++;
@@ -73,8 +73,8 @@ void	draw_line(t_bonus_game *game, t_point start, t_point end, int color)
 	while (1)
 	{
 		ft_mlx_pixel_put(&game->data.render_buf, start.x, start.y, color);
-		if ((start.x == end.x && start.y == end.y)
-			|| (start.x >= MINI_MAP_SIZE - 1 || start.y >= MINI_MAP_SIZE - 1))
+		if ((start.x == end.x && start.y == end.y) || (start.x >= MINI_MAP_SIZE
+				- 1 || start.y >= MINI_MAP_SIZE - 1))
 			break ;
 		e2 = err * 2;
 		if (e2 > -d.y)
@@ -92,8 +92,8 @@ void	draw_line(t_bonus_game *game, t_point start, t_point end, int color)
 
 float	get_casted_distance(t_bonus_game *game)
 {
-	return (distance_from_origin(&game->data.player,
-			game->portal.x, game->portal.y) * cosf(atan2f(game->portal.y
-				- game->data.player.y, game->portal.x - game->data.player.x)
+	return (distance_from_origin(&game->data.player, game->portal.x,
+			game->portal.y) * cosf(atan2f(game->portal.y - game->data.player.y,
+				game->portal.x - game->data.player.x)
 			- game->data.player.angle.rad));
 }

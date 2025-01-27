@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 23:40:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/27 19:07:57 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 21:29:42 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ typedef struct s_cast
 	float		right_x;
 }				t_cast;
 
-
 typedef struct s_ray
 {
 	float		angle_tan;
@@ -114,7 +113,6 @@ typedef struct s_game
 	float		player_spawn_dir;
 	float		perp_distance;
 }				t_game;
-
 
 /*
  ********* INITIALIZING

@@ -54,31 +54,30 @@ void	draw_mini_sprite(t_bonus_game *game, t_sprite *sprite, t_point offset)
 			- atan2f(sprite->y - game->data.player.y, sprite->x
 				- game->data.player.x));
 	sprite->angle = fabsf(sprite->angle);
-	if (sprite->angle < (FOV * M_PI / 180) / 2
-		|| sprite->angle > (2 * M_PI - (FOV * M_PI / 180) / 2))
+	if (sprite->angle < (FOV * M_PI / 180) / 2 || sprite->angle > (2 * M_PI
+			- (FOV * M_PI / 180) / 2))
 		sprite->is_visible = true;
 	else
 		sprite->is_visible = false;
-	draw_rectangle(&game->data,
-		(t_point){sprite->x * MINI_MAP_SCALE_FACTOR
+	draw_rectangle(&game->data, (t_point){sprite->x * MINI_MAP_SCALE_FACTOR
 		+ offset.x, sprite->y * MINI_MAP_SCALE_FACTOR + offset.y, true},
 		(t_point){5, 5, true}, (color * sprite->is_visible)
 		+ (!sprite->is_visible * 0x807e7a));
 }
 
-void	draw_map_content(t_bonus_game *game, t_point pos,
-		t_point offset, int size)
+void	draw_map_content(t_bonus_game *game, t_point pos, t_point offset,
+		int size)
 {
 	if (game->data.map[(int)pos.y][(int)pos.x] == '1')
 		draw_rectangle(&game->data, (t_point){(int)pos.x * CUB_SIZE
 			* MINI_MAP_SCALE_FACTOR + offset.x, (int)pos.y * CUB_SIZE
-			* MINI_MAP_SCALE_FACTOR + offset.y, true},
-			(t_point){size, size, true}, 0xAAAAAAA);
+			* MINI_MAP_SCALE_FACTOR + offset.y, true}, (t_point){size, size,
+			true}, 0xAAAAAAA);
 	else if (game->data.map[(int)pos.y][(int)pos.x] == 'D')
 		draw_rectangle(&game->data, (t_point){pos.x * CUB_SIZE
 			* MINI_MAP_SCALE_FACTOR + offset.x, pos.y * CUB_SIZE
-			* MINI_MAP_SCALE_FACTOR + offset.y, true}, (t_point){
-			size - 1, size / 2, true}, 0x4f6b82);
+			* MINI_MAP_SCALE_FACTOR + offset.y, true}, (t_point){size - 1, size
+			/ 2, true}, 0x4f6b82);
 }
 
 void	draw_mini_map(t_bonus_game *game)

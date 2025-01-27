@@ -6,11 +6,11 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 01:58:11 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/23 20:46:54 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 20:43:27 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../../includes/headers/cub3d_bonus.h"
 
 void	rays_cast(t_bonus_game *game)
 {
@@ -44,8 +44,8 @@ int	update(t_bonus_game *game)
 	game->data.player.angle.tan = tanf(game->data.player.angle.rad);
 	game->data.player.angle.rad = normalize_angle(game->data.player.angle.rad);
 	clear_mini_map_area(&game->data.render_buf);
-	if (!game->mouse_mode)
-		update_mouse_interaction(game);
+	// if (!game->mouse_mode)
+	// 	update_mouse_interaction(game);
 	update_player_position(game);
 	mlx_clear_window(game->data.mlx, game->data.win);
 	rays_cast(game);
@@ -82,12 +82,22 @@ void	play_sound(t_bonus_game *game, char *path, char *gain)
 	pthread_detach(thread);
 }
 
-int	main(void)
+int	main(int ac, char **av)
 {
 	t_bonus_game	game;
+	t_parse			parse;
 
-	init_bonus_game(&game);
-	check_allocations(&game.data);
+	if (ac != 2)
+		return (print_err(NULL, "Wrong input\nUsage: [./cub3D] [path_to_cub_file]",
+			1), EXIT_FAILURE);
+	ft_memset(&parse, 0, sizeof(t_parse));
+	parse.floor_color = -1;
+	parse.ceil_color = -1;
+	if (ft_parse(&parse, av[1]))
+		return (free_parser(&parse), EXIT_FAILURE);
+	if (init_bonus_game(&game, &parse))
+		return (free_parser(&parse), exit_routine_bonus(&game));
+	free_parser(&parse);
 	mlx_mouse_hide(game.data.mlx, game.data.win);
 	mlx_hook(game.data.win, 17, 0, exit_routine_bonus, &game);
 	mlx_hook(game.data.win, 2, (1L << 0), key_press_bonus, &game);

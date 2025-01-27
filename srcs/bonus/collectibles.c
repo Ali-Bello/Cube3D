@@ -6,11 +6,11 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 16:55:28 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/22 00:20:03 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 18:54:36 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../../includes/headers/cub3d_bonus.h"
 
 int	compare_collectibles(const void *a, const void *b)
 {

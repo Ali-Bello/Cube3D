@@ -6,11 +6,11 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 02:13:09 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/21 07:14:58 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 18:54:48 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../../includes/headers/cub3d_bonus.h"
 
 void	draw_rectangle(t_game *game, t_point pos, t_point dimens, int color)
 {

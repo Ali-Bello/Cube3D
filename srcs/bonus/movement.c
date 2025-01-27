@@ -6,11 +6,11 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 02:33:20 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/23 20:46:33 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 18:55:40 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../../includes/headers/cub3d_bonus.h"
 
 bool	check_surrondings(char **map, float x, float y, char c)
 {

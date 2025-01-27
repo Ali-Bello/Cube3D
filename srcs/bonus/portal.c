@@ -6,34 +6,31 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 01:48:42 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/22 00:20:24 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 20:18:15 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../../includes/headers/cub3d_bonus.h"
 
-void	generate_valid_coordinates(t_bonus_game *game, int *x, int *y)
+void    generate_valid_coordinates(t_bonus_game *game, int *x, int *y)
 {
-	size_t	width;
+    size_t  width;
+    int     map_x;
+    int     map_y;
+    bool    valid;
 
-	if (*y >= 0 && *y / CUB_SIZE < game->data.map_height
-		&& game->data.map[(int)(*y / CUB_SIZE)])
-		width = strlen(game->data.map[(int)(*y / CUB_SIZE)]);
-	else
-		width = 1;
-	*x = (rand() % width) * CUB_SIZE;
-	*y = (rand() % game->data.map_height) * CUB_SIZE;
-	while (*y / CUB_SIZE >= game->data.map_height || *x / CUB_SIZE >= (int)width
-		|| wall_collision_check_bonus(game, *x, *y))
-	{
-		*x = (rand() % width) * CUB_SIZE;
-		*y = (rand() % game->data.map_height) * CUB_SIZE;
-		if (*y >= 0 && *y / CUB_SIZE < game->data.map_height
-			&& game->data.map[(int)(*y / CUB_SIZE)])
-			width = strlen(game->data.map[(int)(*y / CUB_SIZE)]);
-		else
-			width = 0;
-	}
+    valid = false;
+    while (!valid)
+    {
+        map_y = rand() % game->data.map_height;
+        width = ft_strlen(game->data.map[map_y]);
+        map_x = rand() % width;
+        *x = map_x * CUB_SIZE + (CUB_SIZE / 2);
+        *y = map_y * CUB_SIZE + (CUB_SIZE / 2);
+        if (game->data.map[map_y][map_x] == '0' && 
+            !wall_collision_check_bonus(game, *x, *y))
+            valid = true;
+    }
 }
 
 void	teleport_player(t_bonus_game *game)

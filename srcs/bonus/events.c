@@ -6,11 +6,11 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:39:41 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/22 01:20:34 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 19:46:41 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../../includes/headers/cub3d_bonus.h"
 
 void	free_malloced_data(t_bonus_game *game)
 {
@@ -27,22 +27,12 @@ void	free_malloced_data(t_bonus_game *game)
 
 int	exit_routine_bonus(t_bonus_game *game)
 {
-	int	i;
-
 	system("pkill vlc");
-	i = -1;
-	while (++i < 5)
-		mlx_destroy_image(game->data.mlx, game->world[0].textures[i].img);
-	i = -1;
-	while (++i < 5)
-		mlx_destroy_image(game->data.mlx, game->world[1].textures[i].img);
-	mlx_destroy_image(game->data.mlx, game->world[0].coins[0].img.img);
-	mlx_destroy_image(game->data.mlx, game->world[1].coins[0].img.img);
-	mlx_destroy_image(game->data.mlx, game->sky.img);
-	mlx_destroy_image(game->data.mlx, game->portal.img.img);
-	mlx_destroy_image(game->data.mlx, game->data.render_buf.img);
-	mlx_destroy_window(game->data.mlx, game->data.win);
-	mlx_destroy_display(game->data.mlx);
+	destroy_mlx_imgs(game);
+	if (game->data.mlx && game->data.win)
+		mlx_destroy_window(game->data.mlx, game->data.win);
+	if (game->data.mlx)
+		mlx_destroy_display(game->data.mlx);
 	free_malloced_data(game);
 	exit(0);
 	return (0);

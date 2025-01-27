@@ -33,7 +33,7 @@ MANDATORY_SRCS = srcs/mandatory/raycasting.c srcs/mandatory/pixels.c srcs/mandat
 
 BONUS_SRCS = srcs/bonus/events.c srcs/bonus/render.c srcs/bonus/init.c \
 			srcs/bonus/collectibles.c srcs/bonus/mini_map.c srcs/bonus/portal.c \
-			srcs/bonus/debugging.c srcs/bonus/raycasting.c srcs/bonus/movement.c \
+			srcs/bonus/shapes.c srcs/bonus/raycasting.c srcs/bonus/movement.c \
 			srcs/mandatory/formulas.c srcs/mandatory/render.c srcs/mandatory/init.c \
 			srcs/mandatory/raycasting.c srcs/mandatory/events.c srcs/mandatory/pixels.c \
 			srcs/bonus/main.c
@@ -44,7 +44,7 @@ COMBINED_BSRCS = $(PARSING_SRCS) $(BONUS_SRCS)
 
 OBJS = $(patsubst srcs/%.c, $(OBJS_DIR)/%.o, $(COMBINED_SRCS))
 
-BONUS_OBJS = $(patsubst srcs/%.c, $(OBJS_DIR)/%.o, $(COMBINED_BSRCS))
+BONUS_OBJS = $(patsubst srcs/bonus/%.c, $(OBJS_DIR)/bonus/%.o, $(COMBINED_BSRCS))
 
 
 all : $(NAME)
@@ -62,13 +62,15 @@ $(OBJS_DIR)/%.o: srcs/%.c Makefile includes/headers/cub3d.h includes/headers/par
 $(LIBFT): $(LIBFT_PATH)
 	@make -C $(LIBFT_PATH) --no-print-directory
 
-$(BONUS_NAME) : $(BONUS_OBJS) $(LIBFT_PATH)
-	@cc $(CFLAGS) $(BONUS_OBJS) $(MLX_LIB) $(MLX_FLAGS) -o $@
+bonus : $(BONUS_NAME)
+
+$(BONUS_NAME) : $(BONUS_OBJS) $(LIBFT)
+	@cc $(CFLAGS) $(BONUS_OBJS) $(MLX_LIB) $(MLX_FLAGS) $(LIBFT) -o $@
 	@printf "$(ERASE)$(GREEN)--> $@ made <--$(END)\n"
 
-$(OBJS_DIR)/%.o: %.c Makefile includes/headers/cub3d.h includes/headers/parsing.h
+$(OBJS_DIR)/bonus/%.o:srcs/bonus/%.c Makefile includes/headers/cub3d.h includes/headers/cub3d_bonus.h includes/headers/parsing.h
 	@mkdir -p $(OBJS_DIR)
-	@mkdir -p $(OBJS_DIR)/mandatory $(OBJS_DIR)/parsing
+	@mkdir -p $(OBJS_DIR)/bonus
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@printf "$(BLUE) > Compilation :$(END) $<\r"
 
@@ -84,7 +86,6 @@ fclean : clean
 
 re : fclean all
 
-bonus : $(BONUS_NAME)
 
 .PHONY: all clean fclean re
 .SECONDARY:	$(OBJS)

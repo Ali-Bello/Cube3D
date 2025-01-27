@@ -6,11 +6,11 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:40:34 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/21 03:05:29 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 19:31:12 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../../includes/headers/cub3d_bonus.h"
 
 t_point	check_intersection_bonus(t_bonus_game *game, t_ray *ray, bool flag)
 {
@@ -18,7 +18,7 @@ t_point	check_intersection_bonus(t_bonus_game *game, t_ray *ray, bool flag)
 	size_t	width;
 
 	next_touch = (t_point){0};
-	width = get_map_width(&game->data, ray);
+	width = get_map_line_width(&game->data, ray);
 	while (ray->start.x >= 0 && ray->start.x < width * CUB_SIZE
 		&& ray->start.y >= 0 && ray->start.y < game->data.map_height * CUB_SIZE)
 	{
@@ -34,7 +34,7 @@ t_point	check_intersection_bonus(t_bonus_game *game, t_ray *ray, bool flag)
 			return ((t_point){next_touch.x, next_touch.y, true});
 		ray->start.x += ray->x_step;
 		ray->start.y += ray->y_step;
-		width = get_map_width(&game->data, ray);
+		width = get_map_line_width(&game->data, ray);
 	}
 	return (next_touch);
 }

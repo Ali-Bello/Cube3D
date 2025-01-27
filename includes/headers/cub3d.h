@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 23:40:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/27 01:06:08 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 19:07:57 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,9 @@ typedef struct s_game
  ********* INITIALIZING
 */
 
-int			init_game(t_game *data, t_parse *parse);
+int				init_game(t_game *data, t_parse *parse);
 int				load_image(t_game *data, t_img *img, char *path);
+void			get_parsed_data(t_game *game, t_parse *parse);
 
 /*
  ********** RAYCASTING 

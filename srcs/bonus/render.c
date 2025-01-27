@@ -6,12 +6,38 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:38:39 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/21 02:40:44 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 20:46:00 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../../includes/headers/cub3d_bonus.h"
 
+void	destroy_mlx_imgs(t_bonus_game *game)
+{
+	int	i;
+
+	i = -1;
+	if (game->data.mlx)
+	{
+		while (++i < 5)
+			if (game->world[0].textures[i].img)
+				mlx_destroy_image(game->data.mlx, game->world[0].textures[i].img);
+		i = -1;
+		while (++i < 5)
+			if (game->world[1].textures[i].img)
+				mlx_destroy_image(game->data.mlx, game->world[1].textures[i].img);
+		if (game->world[0].coins && game->world[0].coins[0].img.img)
+			mlx_destroy_image(game->data.mlx, game->world[0].coins[0].img.img);
+		if (game->world[0].coins && game->world[1].coins[0].img.img)
+			mlx_destroy_image(game->data.mlx, game->world[1].coins[0].img.img);
+		if (game->sky.img)
+			mlx_destroy_image(game->data.mlx, game->sky.img);
+		if (game->portal.img.img)
+			mlx_destroy_image(game->data.mlx, game->portal.img.img);
+		if (game->data.render_buf.img)
+			mlx_destroy_image(game->data.mlx, game->data.render_buf.img);
+	}
+}
 int	get_texture_id_bonus(t_bonus_game *game, t_ray *ray)
 {
 	int	tex_id;
@@ -22,16 +48,16 @@ int	get_texture_id_bonus(t_bonus_game *game, t_ray *ray)
 	if (!ray->wall_hit_face)
 	{
 		if (!ray->facing_left)
-			tex_id = 0;
+			tex_id = 2;
 		else
-			tex_id = 1;
+			tex_id = 3;
 	}
 	else
 	{
 		if (!ray->facing_down)
-			tex_id = 2;
+			tex_id = 0;
 		else
-			tex_id = 3;
+			tex_id = 1;
 	}
 	return (tex_id);
 }

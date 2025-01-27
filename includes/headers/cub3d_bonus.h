@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 23:45:44 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/22 02:56:01 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/27 19:45:49 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_bonus_game
 	int			world_idx;
 }				t_bonus_game;
 
+void			destroy_mlx_imgs(t_bonus_game *game);
 void			free_malloced_data(t_bonus_game *game);
 void			update_player_position(t_bonus_game *game);
 void			update_mouse_interaction(t_bonus_game *game);
@@ -81,7 +82,6 @@ void			play_sound(t_bonus_game *game, char *path, char *gain);
 
 //////////// COLLECTIBLES /////////////
 
-void			init_collectibles(t_bonus_game *game, int world_id, char *path);
 void			update_collectibles(t_bonus_game *game);
 void			generate_valid_coordinates(t_bonus_game *game, int *x, int *y);
 
@@ -118,7 +118,7 @@ void			draw_line(t_bonus_game *game, t_point start, t_point end,
 
 //////////// INITIALIZING /////////////
 
-void			init_bonus_game(t_bonus_game *data);
+int				init_bonus_game(t_bonus_game *data, t_parse *parse);
 ///////////////////////////////////////
 
 ////////////  RAYCASTING  /////////////

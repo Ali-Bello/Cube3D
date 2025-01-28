@@ -9,7 +9,7 @@ END			:=	\033[0m
 
 NAME = cub3D
 
-BONUS_NAME = cub3d_bonus
+BONUS_NAME = cub3D_bonus
 
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
 
@@ -83,7 +83,6 @@ fclean : clean
 	@printf "$(MAGENTA)-->	$(NAME) removed$(END)\n"
 
 re : fclean all
-
 
 .PHONY: all clean fclean re
 .SECONDARY:	$(OBJS)

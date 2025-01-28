@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 02:55:33 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/27 23:54:36 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 23:52:28 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	draw_map_content(t_bonus_game *game, t_point pos, t_point offset,
 	else if (game->data.map[(int)pos.y][(int)pos.x] == 'D')
 		draw_rectangle(&game->data, (t_point){(int)(pos.x * CUB_SIZE
 				* MINI_MAP_SCALE_FACTOR) + offset.x, (int)(pos.y * CUB_SIZE
-				* MINI_MAP_SCALE_FACTOR) + offset.y, true}, (t_point){size - 1,
-			size / 2, true}, 0x4f6b82);
+				* MINI_MAP_SCALE_FACTOR) + offset.y, true}, (t_point){size,
+			size, true}, 0x4f6b82);
 }
 
 void	draw_mini_map(t_bonus_game *game)

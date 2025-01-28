@@ -6,13 +6,13 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 01:29:47 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/27 00:38:54 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 22:20:12 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/headers/cub3d.h"
 
-bool	check_enclosure(char **map, int height)
+bool	check_enclosure(t_parse *parse, char **map)
 {
 	int	i;
 
@@ -23,7 +23,7 @@ bool	check_enclosure(char **map, int height)
 	{
 		if (!check_boundaries(map[i]))
 			return (false);
-		if (!check_empty_gaps(map, i, height))
+		if (!check_empty_gaps(parse, map, i))
 			return (false);
 	}
 	return (true);
@@ -59,7 +59,7 @@ bool	validate_map(t_parse *parse)
 	copy = duplicate_map(parse->map, &parse->map_height);
 	if (!copy)
 		return (false);
-	if (!check_enclosure(copy, parse->map_height))
+	if (!check_enclosure(parse, copy))
 		return (free_2d_array(copy), false);
 	if (!check_top_and_bottom(copy, parse->map_height))
 		return (free_2d_array(copy), false);

@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 16:40:34 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/28 00:38:23 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 23:28:23 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ t_point	check_intersection_bonus(t_bonus_game *game, t_ray *ray, bool flag)
 	{
 		next_touch.x = ray->start.x;
 		if (flag && ray->facing_left)
-			next_touch.x -= 0.001;
+			next_touch.x -= 0.0001f;
 		next_touch.y = ray->start.y;
 		if (!flag && !ray->facing_down)
-			next_touch.y -= 0.001;
+			next_touch.y -= 0.0001f;
 		if (game->data.map[(int)(next_touch.y / CUB_SIZE)][(int)(next_touch.x
 				/ CUB_SIZE)] == '1' || game->data.map[(int)(next_touch.y
 				/ CUB_SIZE)][(int)(next_touch.x / CUB_SIZE)] == 'D')

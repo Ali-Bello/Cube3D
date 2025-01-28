@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 23:25:57 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/28 00:08:29 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 23:14:33 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,14 @@ int	main(int ac, char **av)
 	t_parse	parse;
 
 	if (ac != 2)
-		return (print_err(NULL, "Wrong input\nUsage: [./cub3D]\
-			[path_to_cub_file]", 1), EXIT_FAILURE);
-	if (FOV <= 0 || FOV > 130 || CUB_SIZE <= 0 || WALK_SPEED <= 0
-		|| ROT_SPEED <= 0 || WIN_WIDTH <= 0 || WIN_HEIGHT <= 0)
+		return (print_err("Wrong input",
+				"\nUsage: [./cub3D] [path_to_cub_file]", 1), EXIT_FAILURE);
+	if (check_constants())
 		return (print_err(NULL, "Invalid Constants", 1), EXIT_FAILURE);
 	ft_memset(&parse, 0, sizeof(t_parse));
 	parse.floor_color = -1;
 	parse.ceil_color = -1;
+	parse.valid_set = "01NEWS";
 	if (ft_parse(&parse, av[1]))
 		return (free_parser(&parse), EXIT_FAILURE);
 	if (init_game(&game, &parse))

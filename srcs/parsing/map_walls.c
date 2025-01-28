@@ -6,19 +6,13 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 17:52:39 by elbaraka          #+#    #+#             */
-/*   Updated: 2025/01/27 23:36:26 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 22:20:40 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/headers/cub3d.h"
 
-int	is_traversable(int c)
-{
-	return (c == '0' || c == '1' || c == 'N' || c == 'E' || c == 'W'
-		|| c == 'S');
-}
-
-bool	check_empty_gaps(char **map, int i, int height)
+bool	check_empty_gaps(t_parse *parse, char **map, int i)
 {
 	size_t	j;
 
@@ -27,13 +21,13 @@ bool	check_empty_gaps(char **map, int i, int height)
 	{
 		if (map[i][j] == '0')
 		{
-			if (!map[i][j + 1] || !is_traversable(map[i][j + 1]))
+			if (!map[i][j + 1] || !ft_strchr(parse->valid_set, map[i][j + 1]))
 				return (false);
 			if (i <= 0 || j >= ft_strlen(map[i - 1])
-				|| !is_traversable(map[i - 1][j]))
+				|| !ft_strchr(parse->valid_set, map[i - 1][j]))
 				return (false);
-			if (i >= height || j >= ft_strlen(map[i + 1])
-				|| !is_traversable(map[i + 1][j]))
+			if (i >= parse->map_height || j >= ft_strlen(map[i + 1])
+				|| !ft_strchr(parse->valid_set, map[i + 1][j]))
 				return (false);
 		}
 		j++;
@@ -62,8 +56,7 @@ bool	check_player_surronding(t_parse *parse, int i, int j)
 {
 	if (j <= 0 || ft_isspace(parse->map[i][j - 1]))
 		return (true);
-	if (j >= (int)ft_strlen(parse->map[i])
-		|| ft_isspace(parse->map[i][j + 1]))
+	if (j >= (int)ft_strlen(parse->map[i]) || ft_isspace(parse->map[i][j + 1]))
 		return (true);
 	if (i <= 0 || j >= (int)ft_strlen(parse->map[i - 1])
 		|| ft_isspace(parse->map[i - 1][j]))

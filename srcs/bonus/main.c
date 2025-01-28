@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 01:58:11 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/28 00:08:08 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 23:16:34 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void	play_sound(t_bonus_game *game, char *path, char *gain)
 	result = calloc(100, sizeof(char));
 	if (result == NULL)
 		return ;
-	snprintf(result, 100, "cvlc --gain=%s --play-and-exit --quiet %s\
+	snprintf(result, 100,
+		"cvlc --gain=%s --play-and-exit --quiet %s\
 		> /dev/null 2>&1", gain, path);
 	pthread_create(&thread, NULL, call_sound_cmd, result);
 	pthread_detach(thread);
@@ -88,14 +89,14 @@ int	main(int ac, char **av)
 	t_parse			parse;
 
 	if (ac != 2)
-		return (print_err(NULL, "Wrong input\nUsage: [./cub3D]\
-			[path_to_cub_file]", 1), EXIT_FAILURE);
-	if (FOV <= 0 || FOV > 130 || CUB_SIZE <= 0 || WALK_SPEED <= 0
-		|| ROT_SPEED <= 0 || WIN_WIDTH <= 0 || WIN_HEIGHT <= 0)
+		return (print_err("Wrong input\n",
+				"Usage: [./cub3D] [path_to_cub_file]", 1), EXIT_FAILURE);
+	if (check_constants())
 		return (print_err(NULL, "Invalid Constants", 1), EXIT_FAILURE);
 	ft_memset(&parse, 0, sizeof(t_parse));
 	parse.floor_color = -1;
 	parse.ceil_color = -1;
+	parse.valid_set = "01NEWSD";
 	if (ft_parse(&parse, av[1]))
 		return (free_parser(&parse), EXIT_FAILURE);
 	if (init_bonus_game(&game, &parse))

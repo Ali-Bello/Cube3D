@@ -6,23 +6,23 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 23:33:08 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/20 00:36:20 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 23:13:15 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COLORS_H
 # define COLORS_H
 
-# define PR_RED "\x1b[31m"
-# define PR_GREEN "\x1b[32m"
-# define PR_BLUE "\x1b[34m"
-# define PR_YELLOW "\x1b[33m"
-# define PR_MAGENTA "\x1b[35m"
-# define PR_CYAN "\x1b[36m"
-# define PR_RESET "\x1b[0m"
-# define PR_BOLD "\x1b[1m"
-# define PR_ITALIC "\x1b[3m"
-# define PR_UNDERLINE "\x1b[4m"
+# define WR_RED "\x1b[31m"
+# define WR_GREEN "\x1b[32m"
+# define WR_BLUE "\x1b[34m"
+# define WR_YELLOW "\x1b[33m"
+# define WR_MAGENTA "\x1b[35m"
+# define WR_CYAN "\x1b[36m"
+# define WR_RESET "\x1b[0m"
+# define WR_BOLD "\x1b[1m"
+# define WR_ITALIC "\x1b[3m"
+# define WR_UNDERLINE "\x1b[4m"
 
 # define WHITE 0xFFFFFF
 # define DARK_BROWN 0x8B4513

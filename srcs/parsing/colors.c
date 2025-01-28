@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 19:55:12 by elbaraka          #+#    #+#             */
-/*   Updated: 2025/01/27 00:38:54 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 21:58:07 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ static int	rgb_to_int(char **rgb_to_convert)
 	g = ft_atoi(rgb_to_convert[1]);
 	b = ft_atoi(rgb_to_convert[2]);
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-	{
-		free_2d_array(rgb_to_convert);
-		return (0);
-	}
+		return (-1);
 	return (((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff));
 }
 

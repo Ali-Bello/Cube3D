@@ -6,11 +6,19 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 16:31:21 by elbaraka          #+#    #+#             */
-/*   Updated: 2025/01/27 00:38:54 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 23:15:41 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/headers/cub3d.h"
+
+int	check_constants(void)
+{
+	return (FOV <= 0 || FOV > 130 || CUB_SIZE <= 0 || WALK_SPEED <= 0
+		|| ROT_SPEED <= 0 || WIN_WIDTH <= 10 || WIN_HEIGHT <= 10
+		|| WIN_WIDTH > 1920 || WIN_HEIGHT > 1080
+		|| MINI_MAP_SCALE_FACTOR >= 1.2);
+}
 
 int	print_err(char *info, char *str, int code)
 {

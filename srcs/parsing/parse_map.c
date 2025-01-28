@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 19:57:27 by elbaraka          #+#    #+#             */
-/*   Updated: 2025/01/27 00:38:54 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/28 22:15:27 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,14 @@ char	**extend_2d_array(char **arr, char *new, int *size)
 	return (new_arr);
 }
 
-bool	is_valid_char(char c)
-{
-	return (c == '1' || c == '0' || c == 'N' || c == 'S' || c == 'W' || c == 'E'
-		|| c == ' ' || c == '\t' || c == '\r' || c == '\b');
-}
-
-int	check_valid_map_chars(char *line)
+int	check_valid_map_chars(char *line, char *valid_chars)
 {
 	int	i;
 
 	i = 0;
 	while (line[i])
 	{
-		if (!is_valid_char(line[i]))
+		if (!ft_strchr(valid_chars, line[i]) && !ft_isspace(line[i]))
 			return (print_err(NULL, "Invalid character in map", 1));
 		i++;
 	}
@@ -83,7 +77,7 @@ int	get_map_line(t_parse *parse, char *line)
 {
 	if (line[ft_strlen(line) - 1] == '\n')
 		line[ft_strlen(line) - 1] = '\0';
-	if (check_valid_map_chars(line) == 1)
+	if (check_valid_map_chars(line, parse->valid_set) == 1)
 		return (1);
 	parse->map = extend_2d_array(parse->map, line, &parse->map_height);
 	if (!parse->map)

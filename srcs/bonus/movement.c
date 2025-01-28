@@ -52,8 +52,8 @@ void	update_mouse_interaction(t_bonus_game *game)
 	if (dx != 0)
 	{
 		game->data.player.angle.rad += ((ROT_SPEED / 7.0) * (M_PI / 180)) * dx;
-		mlx_mouse_move(game->data.mlx, game->data.win, WIN_WIDTH / 2,
-			WIN_HEIGHT / 2);
+		mlx_mouse_move(game->data.mlx, game->data.win, WIN_WIDTH / 2, WIN_HEIGHT
+			/ 2);
 	}
 }
 

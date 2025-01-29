@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 23:25:57 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/28 23:14:33 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/29 01:30:31 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	update_player_position(t_game *game)
 		+ (cosf(game->player.angle.rad + M_PI_2) * strafe_step);
 	next_map_player_y = game->player.y + (game->player.angle.sin * move_step)
 		+ (sinf(game->player.angle.rad + M_PI_2) * strafe_step);
-	game->player.angle.rad += (game->player.turn_dir * (ROT_SPEED * (M_PI
-					/ 180)));
+	game->player.angle.rad += (game->player.turn_dir
+			* ((ROT_SPEED / 2.0) * (M_PI / 180)));
 	if (!wall_collision_check(game, next_map_player_x, next_map_player_y))
 	{
 		game->player.x = next_map_player_x;

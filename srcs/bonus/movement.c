@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 02:33:20 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/27 23:58:02 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/29 01:31:21 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,24 @@ bool	wall_collision_check_bonus(t_bonus_game *game, float x, float y)
 
 void	update_mouse_interaction(t_bonus_game *game)
 {
-	static int	prev_x;
+	static int	prev_x = -1;
 	int			x;
 	int			dx;
 
 	mlx_mouse_get_pos(game->data.mlx, game->data.win, &x, &dx);
-	if (!prev_x)
+	if (prev_x == -1)
 	{
 		prev_x = x;
 		return ;
 	}
-	dx = (x - WIN_WIDTH / 2);
+	dx = x - prev_x;
 	if (dx != 0)
 	{
-		game->data.player.angle.rad += ((ROT_SPEED / 7.0) * (M_PI / 180)) * dx;
-		mlx_mouse_move(game->data.mlx, game->data.win, WIN_WIDTH / 2, WIN_HEIGHT
-			/ 2);
+		game->data.player.angle.rad += ((WIN_WIDTH / ((ROT_SPEED / 2.0)
+						* WIN_WIDTH)) * (M_PI / 180)) * dx / 2.0;
+		mlx_mouse_move(game->data.mlx,
+			game->data.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+		prev_x = WIN_WIDTH / 2;
 	}
 }
 
@@ -88,7 +90,7 @@ void	update_player_position(t_bonus_game *game)
 	next_map_player_y = game->data.player.y + (game->data.player.angle.sin
 			* move_step) + (sinf(game->data.player.angle.rad + M_PI_2)
 			* strafe_step);
-	game->data.player.angle.rad += (game->data.player.turn_dir * (ROT_SPEED
-				* (M_PI / 180)));
+	game->data.player.angle.rad += (game->data.player.turn_dir
+			* ((ROT_SPEED / 2.0) * (M_PI / 180)));
 	move_player(game, next_map_player_x, next_map_player_y);
 }

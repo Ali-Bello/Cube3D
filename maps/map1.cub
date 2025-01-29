@@ -1,0 +1,17 @@
+NO ./assets/textures/no_wall.xpm
+SO ./assets/textures/so_wall.xpm
+WE ./assets/textures/we_wall.xpm
+EA ./assets/textures/ea_wall.xpm
+
+
+F 123,234,45
+C 76,34,129
+
+111111111    
+  100000001    
+  100111101    
+  100100001    
+   101100001   
+  100000001    
+   1000S0001    
+    111111111

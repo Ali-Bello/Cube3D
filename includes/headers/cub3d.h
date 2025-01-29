@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 23:40:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/01/28 23:58:41 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/29 01:28:40 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@
 # define CUB_SIZE 64
 # define FOV 70
 # define WIN_WIDTH 1280
-# define WIN_HEIGHT 720
-# define WALK_SPEED 1.5
+# define WIN_HEIGHT 720		
+# define WALK_SPEED 2.0
 # define ROT_SPEED WALK_SPEED
 # define MINI_MAP_SIZE 150
 # define MINI_MAP_SCALE_FACTOR 0.6

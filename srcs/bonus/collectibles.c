@@ -6,7 +6,7 @@
 /*   By: aderraj <aderraj@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 16:55:28 by aderraj           #+#    #+#             */
-/*   Updated: 2025/01/28 23:17:15 by aderraj          ###   ########.fr       */
+/*   Updated: 2025/01/29 00:22:38 by aderraj          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	render_collectibles(t_bonus_game *game, int i)
 		game->world[game->world_idx].coins[i].offset_x = 0;
 	set_sprite_dimensions(game, &game->world[game->world_idx].coins[i]);
 	draw_sprite(game, &game->world[game->world_idx].coins[i]);
-	if (game->world[game->world_idx].coins[i].delta % 15 == 0)
+	if (game->world[game->world_idx].coins[i].delta % 10 == 0)
 		game->world[game->world_idx].coins[i].offset_x
 			+= game->world[game->world_idx].coins[i].frame_width;
 	game->world[game->world_idx].coins[i].delta++;
